@@ -23,7 +23,7 @@ app.use("/api/mood", moodRoutes);
 app.use("/api/tasks", routineRoutes);
 app.use("/api/quiz", quizRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = app;
