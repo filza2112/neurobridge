@@ -11,16 +11,15 @@ const quizSchema = new mongoose.Schema({
   },
 
   // For first & weekly quiz
-  answers: [
-    {
-      question: String,
-      answer: String, // Optional: e.g., attention, mood, etc.
-      traits: [String], // Optional: for first-time quiz
-    },
-  ],
-  inferredCondition: {
+  inferredScores: {
+    ADHD: { type: Number, default: 0 },
+    OCD: { type: Number, default: 0 },
+    Autism: { type: Number, default: 0 },
+  },
+
+  primaryCondition: {
     type: String,
-    enum: ["Autism", "ADHD", "OCD", "None", "Other"],
+    enum: ["ADHD", "OCD", "Autism", "None"],
     default: "None",
   },
 
