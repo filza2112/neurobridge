@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/dashboard';
 import RoutineBuilderPage from './pages/Routine';
 import FocusMoodTrackerPage from './pages/Focus';
-import QuizPage from './pages/Quiz';
+import QuizPage from './pages/QuizPage';
 
 export default function App() {
   return (
