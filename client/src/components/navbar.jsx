@@ -54,8 +54,8 @@ const Navbar = () => {
         </ul>
 
         <div className="hidden md:flex space-x-6 items-center">
-          <div className="w-[28px] h-[20px] bg-gray-300 flex items-center justify-center text-xs text-gray-700">Lang</div>
-          <button className="px-5 my-5 font-mullish text-white border border-accent rounded-sm text-sm font-bold whitespace-nowrap">
+          {/* <div className="w-[28px] h-[20px] bg-gray-300 flex items-center justify-center text-xs text-gray-700">Lang</div> */}
+          <button className="px-5 my-5 py-3 font-mullish text-white border border-accent rounded-sm text-sm font-bold whitespace-nowrap hover:text-primary hover:bg-white">
             Log in
           </button>
           <button className="px-3 py-3 my-5 text-sm rounded-sm font-mullish font-bold bg-white text-primary border border-white hover:text-text-secondary transition-all duration-200 whitespace-nowrap">

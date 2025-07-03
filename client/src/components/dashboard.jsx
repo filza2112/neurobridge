@@ -39,7 +39,7 @@ const features = [
 
 export default function FeatureSection() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 bg-[#F6FFF8]">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 bg-[#FFFFFF]">
       {features.map((feature) => (
         <Link
           key={feature.id}

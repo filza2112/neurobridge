@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Dashboard from './pages/dashboard';
+import Homepage from './pages/homepage';
 import RoutineBuilderPage from './pages/Routine';
 import FocusMoodTrackerPage from './pages/Focus';
 import QuizPage from './pages/QuizPage';
@@ -12,7 +12,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Homepage />} />
         <Route path="/features/routine-builder" element={<RoutineBuilderPage />} />
         <Route path="/features/focus-mood-tracker" element={<FocusMoodTrackerPage />} />
 
