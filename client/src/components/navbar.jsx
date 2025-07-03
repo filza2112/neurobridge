@@ -16,8 +16,19 @@ const RightArrowIcon = ({ className }) => (
   </svg>
 );
 
+
+
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+const [isSignupMode, setSignupMode] = useState(false);
+
+const openModal = (signup = false) => {
+  setSignupMode(signup);
+  setShowModal(true);
+};
+
+const closeModal = () => setShowModal(false);
 
   return (
     <nav className="bg-primary flex relative z-50">
@@ -56,13 +67,20 @@ const Navbar = () => {
 
         <div className="hidden md:flex space-x-6 items-center">
           {/* <div className="w-[28px] h-[20px] bg-gray-300 flex items-center justify-center text-xs text-gray-700">Lang</div> */}
-          <button className="px-5 my-5 py-3 font-mullish text-white border border-accent rounded-sm text-sm font-bold whitespace-nowrap hover:text-primary hover:bg-white">
-            Log in
-          </button>
-          <button className="px-3 py-3 my-5 text-sm rounded-sm font-mullish font-bold bg-white text-primary border border-white hover:text-text-secondary transition-all duration-200 whitespace-nowrap">
-            Sign up
-            <RightArrowIcon className="w-[14px] h-[14px] ml-3 inline-block" />
-          </button>
+          <button
+  onClick={() => openModal(false)}
+  className="px-5 my-5 py-3 font-mullish text-white border border-accent rounded-sm text-sm font-bold whitespace-nowrap hover:text-primary hover:bg-white"
+>
+  Log in
+</button>
+<button
+  onClick={() => openModal(true)}
+  className="px-3 py-3 my-5 text-sm rounded-sm font-mullish font-bold bg-white text-primary border border-white hover:text-text-secondary transition-all duration-200 whitespace-nowrap"
+>
+  Sign up
+  <RightArrowIcon className="w-[14px] h-[14px] ml-3 inline-block" />
+</button>
+
         </div>
       </div>
 
@@ -104,7 +122,14 @@ const Navbar = () => {
           </div>
         </div>
       )}
+      <AuthModal
+  isOpen={showModal}
+  onClose={closeModal}
+  isSignupMode={isSignupMode}
+  setSignupMode={setSignupMode}
+/>
     </nav>
+    
   );
 };
 
