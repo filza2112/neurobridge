@@ -44,6 +44,19 @@ router.post("/update", async (req, res) => {
   }
 });
 
+// DELETE /api/tasks/:id - Delete a task
+router.delete("/delete/:id", async (req, res) => {
+  try {
+    const deleted = await Task.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ error: "Task not found." });
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error deleting task:", err);
+    res.status(500).json({ error: "Failed to delete task." });
+  }
+});
+
+
 // GET /api/tasks/smart-generate - Generate smart tasks
 router.get("/smart-generate", async (req, res) => {
   const { userId } = req.query;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TaskList from "../features/RoutineBuilder/TaskList";
 import AddTaskModal from "../features/RoutineBuilder/AddTaskModel";
-import TaskAnalytics from "../features/RoutineBuilder/TaskList";
+import TaskAnalytics from "../features/RoutineBuilder/TaskAnalytics";
 
 const userId = "demo-user";
 
@@ -24,7 +24,7 @@ function RoutineBuilder() {
     const sorted = [...taskArray].sort((a, b) => {
       const weightA = (a.moodLevel ?? 50) * 0.6 + (a.focusLevel ?? 50) * 0.4;
       const weightB = (b.moodLevel ?? 50) * 0.6 + (b.focusLevel ?? 50) * 0.4;
-      return weightA - weightB; // Easier first
+      return weightA - weightB; 
     });
     setTasks(sorted);
     updateCompletionStats(sorted);
