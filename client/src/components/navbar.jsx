@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import AuthModal from './AuthModal';
 
 
 const RightArrowIcon = ({ className }) => (
