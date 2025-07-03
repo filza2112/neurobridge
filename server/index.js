@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const focusRoutes = require("./routes/focus");
 const moodRoutes = require("./routes/mood"); 
+const routineRoutes = require("./routes/routine");
 
 const app = express();
 app.use(cors());
@@ -18,6 +19,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 app.use("/api/focus", focusRoutes);
 app.use("/api/mood", moodRoutes);
+app.use("/api/tasks", routineRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

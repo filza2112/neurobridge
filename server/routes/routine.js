@@ -1,0 +1,151 @@
+// routes/taskRoutes.js
+const express = require("express");
+const router = express.Router();
+const Task = require("../models/Task");
+
+// POST /api/tasks/add - Add personal task
+router.post("/add", async (req, res) => {
+  const { userId, title, estimatedTime = 15 } = req.body;
+
+  if (!userId || !title) {
+    return res.status(400).json({ error: "userId and title are required." });
+  }
+
+  const newTask = new Task({
+    userId,
+    title,
+    date: new Date().toISOString().slice(0, 10),
+    type: "personal",
+    estimatedTime,
+    completed: false,
+    moodLevel: null,
+    focusLevel: null,
+  });
+
+  try {
+    const saved = await newTask.save();
+    res.status(201).json(saved);
+  } catch (err) {
+    console.error("Error adding task:", err);
+    res.status(500).json({ error: "Failed to add task." });
+  }
+});
+
+// POST /api/tasks/update
+router.post("/update", async (req, res) => {
+  const { taskId, updates } = req.body;
+
+  try {
+    const updatedTask = await Task.findByIdAndUpdate(taskId, updates, { new: true });
+    res.json(updatedTask);
+  } catch (err) {
+    console.error("Error updating task:", err);
+    res.status(500).json({ error: "Failed to update task" });
+  }
+});
+
+// GET /api/tasks/smart-generate - Generate smart tasks
+router.get("/smart-generate", async (req, res) => {
+  const { userId } = req.query;
+
+  const moodLog = await MoodLog.findOne({ userId }).sort({ timestamp: -1 });
+  const focusLog = await FocusLog.findOne({ userId }).sort({ timestamp: -1 });
+
+  const mood = moodLog?.mood || 50;
+  const focus = focusLog?.visible ? 1 : 0;
+
+  let tasks = [];
+  if (focus < 0.5 || mood < 50) {
+    tasks = [
+      { title: "Take 5-min mindful break", estimatedTime: 5 },
+      { title: "Light exercise", estimatedTime: 10 },
+    ];
+  } else {
+    tasks = [
+      { title: "Work on main project", estimatedTime: 60 },
+      { title: "Review goals", estimatedTime: 10 },
+    ];
+  }
+
+  const date = new Date().toISOString().slice(0, 10);
+  const newTasks = await Task.insertMany(tasks.map((t) => ({
+    ...t,
+    userId,
+    date,
+    type: "smart",
+    moodLevel: mood,
+    focusLevel: focus,
+  })));
+
+  res.json(newTasks);
+});
+
+// GET /api/tasks/streak
+router.get("/streak", async (req, res) => {
+  const { userId } = req.query;
+  const today = new Date().toISOString().slice(0, 10);
+  const tasks = await Task.find({ userId }).sort({ date: -1 });
+
+  let streak = 0;
+  let current = new Date(today);
+
+  const grouped = tasks.reduce((acc, t) => {
+    acc[t.date] = acc[t.date] || [];
+    acc[t.date].push(t);
+    return acc;
+  }, {});
+
+  for (let [date, dayTasks] of Object.entries(grouped)) {
+    const allComplete = dayTasks.every((t) => t.completed);
+    if (allComplete) {
+      streak++;
+      current.setDate(current.getDate() - 1);
+    } else break;
+  }
+
+  res.json({ streak });
+});
+
+// GET /api/tasks/completion-history
+router.get("/completion-history", async (req, res) => {
+  const { userId } = req.query;
+
+  const logs = await Task.find({ userId }).sort({ date: -1 });
+  const history = {};
+
+  logs.forEach((task) => {
+    const date = task.date;
+    if (!history[date]) history[date] = { completed: 0, total: 0 };
+    history[date].total += 1;
+    if (task.completed) history[date].completed += 1;
+  });
+
+  const result = Object.entries(history)
+    .slice(-7)
+    .map(([date, val]) => ({
+      date,
+      percent: ((val.completed / val.total) * 100).toFixed(0),
+    }));
+
+  res.json(result);
+});
+
+// GET /api/tasks/all - Get all tasks for a user
+router.get("/all", async (req, res) => {
+  const { userId } = req.query;
+
+  if (!userId) {
+    return res.status(400).json({ error: "userId is required in query." });
+  }
+
+  try {
+    const tasks = await Task.find({ userId }).sort({ date: -1 });
+    res.json(tasks);
+  } catch (err) {
+    console.error("Error fetching tasks:", err);
+    res.status(500).json({ error: "Failed to fetch tasks." });
+  }
+});
+
+
+module.exports = router;
