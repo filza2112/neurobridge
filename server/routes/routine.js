@@ -57,41 +57,91 @@ router.delete("/delete/:id", async (req, res) => {
 });
 
 
-// GET /api/tasks/smart-generate - Generate smart tasks
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const MoodLog = require("./mood");
+const FocusLog = require("./focus");
+const QuizData = require("../models/Quiz");
+
+// Initialize Gemini
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
 router.get("/smart-generate", async (req, res) => {
   const { userId } = req.query;
+  if (!userId) return res.status(400).json({ error: "userId required" });
 
-  const moodLog = await MoodLog.findOne({ userId }).sort({ timestamp: -1 });
-  const focusLog = await FocusLog.findOne({ userId }).sort({ timestamp: -1 });
+  try {
+    // 1. Fetch mood, focus, quiz data
+    const [moodLog, focusLog, quiz] = await Promise.all([
+      MoodLog.findOne({ userId }).sort({ timestamp: -1 }),
+      FocusLog.findOne({ userId }).sort({ timestamp: -1 }),
+      QuizData.findOne({ userId }).sort({ createdAt: -1 }),
+    ]);
 
-  const mood = moodLog?.mood || 50;
-  const focus = focusLog?.visible ? 1 : 0;
+    const mood = moodLog?.mood ?? 50;
+    const focus = focusLog?.visible ? 1 : 0;
 
-  let tasks = [];
-  if (focus < 0.5 || mood < 50) {
-    tasks = [
-      { title: "Take 5-min mindful break", estimatedTime: 5 },
-      { title: "Light exercise", estimatedTime: 10 },
-    ];
-  } else {
-    tasks = [
-      { title: "Work on main project", estimatedTime: 60 },
-      { title: "Review goals", estimatedTime: 10 },
-    ];
+    if (!quiz) {
+      
+      return res.status(400).json({ error: "Quiz data not found." });
+    }
+
+    const prompt = `
+You're a productivity and mental health assistant AI.
+
+The user has submitted quiz responses indicating their behavior and cognition. Analyze these responses and infer whether the user shows tendencies toward Autism, ADHD, OCD, or other neurodivergent patterns.
+
+Also consider:
+- Mood level (scale 0–100): ${mood}
+- Focus level (1 = focused, 0 = not focused): ${focus}
+
+Based on the above, generate a helpful and adaptive daily routine for the user.
+
+Only return a JSON array like this:
+[
+  { "title": "Take a short walk", "estimatedTime": 10 },
+  { "title": "Stretch and hydrate", "estimatedTime": 5 }
+]
+
+Quiz Responses:
+${JSON.stringify(quiz.answers || quiz)}
+`;
+
+    // 2. Call Gemini
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
+
+    let tasks;
+    try {
+      tasks = JSON.parse(text);
+    } catch (e) {
+      console.error("Gemini returned invalid JSON:", text);
+      return res.status(500).json({ error: "Gemini returned invalid task format." });
+    }
+
+    // 3. Save tasks to DB
+    const date = new Date().toISOString().slice(0, 10);
+    const savedTasks = await Task.insertMany(
+      tasks.map((t) => ({
+        ...t,
+        userId,
+        date,
+        type: "smart",
+        moodLevel: mood,
+        focusLevel: focus,
+      }))
+    );
+
+    res.json(savedTasks);
+  } catch (err) {
+    console.error("AI Routine Generation Error:", err);
+    res.status(500).json({ error: "Failed to generate smart routine" });
   }
-
-  const date = new Date().toISOString().slice(0, 10);
-  const newTasks = await Task.insertMany(tasks.map((t) => ({
-    ...t,
-    userId,
-    date,
-    type: "smart",
-    moodLevel: mood,
-    focusLevel: focus,
-  })));
-
-  res.json(newTasks);
 });
+
 
 // GET /api/tasks/streak
 router.get("/streak", async (req, res) => {

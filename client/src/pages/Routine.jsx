@@ -24,7 +24,7 @@ function RoutineBuilder() {
     const sorted = [...taskArray].sort((a, b) => {
       const weightA = (a.moodLevel ?? 50) * 0.6 + (a.focusLevel ?? 50) * 0.4;
       const weightB = (b.moodLevel ?? 50) * 0.6 + (b.focusLevel ?? 50) * 0.4;
-      return weightA - weightB; 
+      return weightA - weightB;
     });
     setTasks(sorted);
     updateCompletionStats(sorted);
@@ -38,10 +38,24 @@ function RoutineBuilder() {
 
   // Smart Task Generation
   const handleSmartGenerate = async () => {
-    const res = await fetch("http://localhost:5000/api/tasks/smart-generate?userId=demo-user");
-    const generated = await res.json();
-    reorderTasks(generated);
+    try {
+      const res = await fetch("http://localhost:5000/api/tasks/smart-generate?userId=demo-user");
+      const data = await res.json();
+
+      if (!Array.isArray(data)) {
+        console.error("Expected an array but got:", data);
+        alert(data.error || "Failed to generate tasks");
+        return;
+      }
+
+      reorderTasks(data); // only if it's a valid array
+    } catch (err) {
+      console.error("Network or parsing error:", err);
+      alert("Could not connect to task generator.");
+    }
   };
+
+
 
   const handleTaskUpdate = (updatedTasks) => {
     setTasks(updatedTasks);
