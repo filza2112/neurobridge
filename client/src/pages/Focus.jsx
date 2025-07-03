@@ -46,8 +46,10 @@ function FocusPage() {
 
     return (
         <div className="font-mullish bg-background min-h-screen text-primary p-6">
-            <h1 className="text-3xl font-bold text-center mb-8">Focus & Mood Tracker</h1>
-
+            <h1 className="text-3xl font-bold text-center mb-2">Focus & Mood Tracker</h1>
+            <div className="text-center mb-4 text-text-secondary">
+                <p>Track your focus and mood to improve your mental well-being.</p>
+            </div>
             {/* Focus Tracking */}
             <section className="bg-background-alt p-6 rounded-2xl shadow-lg mb-8">
                 <h2 className="text-2xl font-semibold mb-4"> Focus Tracking</h2>
@@ -56,18 +58,27 @@ function FocusPage() {
             </section>
 
             {/* Mood Tracking */}
-            <section className="bg-background-alt p-6 rounded-2xl shadow-lg">
-                <h2 className="text-2xl font-semibold mb-4"> Mood Tracking</h2>
-                <MoodSlider />
-                <MoodDiary />
-                <MoodChart />
+            <section className="bg-background-alt p-6 rounded-2xl shadow-lg mt-6">
+                <h2 className="text-2xl font-semibold mb-6 text-center text-primary">
+                    Mood Tracking
+                </h2>
+
+                <div className="flex flex-col md:flex-row gap-6">
+                    {/* Mood Slider (Left) */}
+                    <div className="w-full md:w-1/2">
+                        <MoodSlider />
+                    </div>
+
+                    {/* Mood Chart (Right) */}
+                    <div className="w-full md:w-1/2">
+                        <MoodChart />
+                    </div>
+                </div>
             </section>
-            <div className="text-center mt-8 text-text-secondary">
-                <p>Track your focus and mood to improve your mental well-being.</p>
-                <p>Data is saved automatically for your convenience.</p>
-            </div>
-    </div >
-  );
+
+            
+        </div >
+    );
 }
 
 export default FocusPage;

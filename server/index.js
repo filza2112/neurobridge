@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const focusRoutes = require("./routes/focus");
+const moodRoutes = require("./routes/mood"); 
 
 const app = express();
 app.use(cors());
@@ -16,6 +17,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   .catch((err) => console.error("MongoDB error:", err));
 
 app.use("/api/focus", focusRoutes);
+app.use("/api/mood", moodRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

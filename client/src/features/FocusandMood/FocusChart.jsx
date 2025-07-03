@@ -84,7 +84,8 @@ function FocusChart() {
 
       <ResponsiveContainer width="100%" height={200}>
         <LineChart data={focusData}>
-          <XAxis dataKey="time" />
+          <XAxis dataKey="time" tick={{ fontSize: 10 }} 
+  interval="preserveStartEnd" />
           <YAxis domain={[0, 1]} ticks={[0, 1]} />
           <Tooltip />
           <Line
