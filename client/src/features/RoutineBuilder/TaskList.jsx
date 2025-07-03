@@ -44,6 +44,21 @@ function TaskList({ tasks = [], setTasks }) {
     setTasks(updated);
   };
 
+  const handleDelete = async (taskId) => {
+    try {
+      await fetch(`http://localhost:5000/api/tasks/delete/${taskId}`, {
+        method: "DELETE",
+      });
+
+      // Remove from state
+      const updated = tasks.filter((task) => task._id !== taskId);
+      setTasks(updated);
+    } catch (err) {
+      console.error("Failed to delete task:", err);
+    }
+  };
+
+
   return (
     <div>
       {tasks.length === 0 ? (
@@ -60,9 +75,8 @@ function TaskList({ tasks = [], setTasks }) {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`p-4 rounded-xl shadow-md bg-white transition ${
-                          snapshot.isDragging ? "bg-blue-50" : ""
-                        }`}
+                        className={`p-4 rounded-xl shadow-md bg-white transition ${snapshot.isDragging ? "bg-blue-50" : ""
+                          }`}
                       >
                         <div className="flex justify-between items-center">
                           <div className="flex-1 mr-4">
@@ -82,9 +96,7 @@ function TaskList({ tasks = [], setTasks }) {
 
                           <div className="flex gap-2">
                             <button
-                              onClick={() =>
-                                editIndex === index ? handleSaveEdit(index) : handleEdit(index)
-                              }
+                              onClick={() => (editIndex === index ? handleSaveEdit(index) : handleEdit(index))}
                               className="btn-secondary text-sm"
                             >
                               {editIndex === index ? "💾" : "✏️"}
@@ -92,13 +104,19 @@ function TaskList({ tasks = [], setTasks }) {
 
                             <button
                               onClick={() => handleToggleComplete(index)}
-                              className={`text-sm px-2 py-1 rounded ${
-                                task.completed ? "bg-green-200" : "bg-gray-200"
-                              }`}
+                              className={`text-sm px-2 py-1 rounded ${task.completed ? "bg-green-200" : "bg-gray-200"}`}
                             >
-                              {task.completed ? "Undo" : "✅"}
+                              {task.completed ? "Undo" : "✔️"}
+                            </button>
+
+                            <button
+                              onClick={() => handleDelete(task._id)}
+                              className="text-sm bg-red-100 hover:bg-red-200 text-red-600 font-semibold px-2 py-1 rounded"
+                            >
+                              🗑
                             </button>
                           </div>
+
                         </div>
                       </li>
                     )}
