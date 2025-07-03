@@ -6,58 +6,114 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  CartesianGrid,
-  Legend,
 } from "recharts";
 
 function FocusChart() {
   const [focusData, setFocusData] = useState([]);
+  const [summary, setSummary] = useState({
+    totalFocusedMinutes: 0,
+    totalDistractedMinutes: 0,
+    focusBreaks: 0,
+    avgTimeBetweenBreaks: 0,
+  });
 
   useEffect(() => {
     fetch("http://localhost:5000/api/focus/all?userId=demo-user")
       .then((res) => res.json())
       .then((data) => {
-        const formatted = data.focusLogs.map((entry) => ({
-          time: new Date(entry.timestamp).toLocaleTimeString("en-GB"), // HH:MM:SS
+        const entries = data.focusLogs;
+
+        const formatted = entries.map((entry) => ({
+          timestamp: new Date(entry.timestamp),
+          time: new Date(entry.timestamp).toLocaleTimeString(),
           focus: entry.visible ? 1 : 0,
         }));
 
-        // Keep only the last 30 entries
-        setFocusData(formatted.slice(-30));
-      })
-      .catch((error) => console.error("Error fetching focus data:", error));
+        setFocusData(formatted);
+
+        // Summary calculations
+        let totalFocused = 0;
+        let totalDistracted = 0;
+        let breaks = 0;
+        let lastTimestamp = null;
+        let breakIntervals = [];
+
+        for (let i = 0; i < formatted.length; i++) {
+          const curr = formatted[i];
+          const next = formatted[i + 1];
+
+          if (i > 0 && formatted[i - 1].focus === 1 && curr.focus === 0) {
+            breaks++;
+            if (lastTimestamp) {
+              const diff =
+                (curr.timestamp.getTime() - lastTimestamp.getTime()) / 1000;
+              breakIntervals.push(diff);
+            }
+          }
+
+          if (next) {
+            const diffSeconds =
+              (next.timestamp.getTime() - curr.timestamp.getTime()) / 1000;
+
+            if (curr.focus === 1) totalFocused += diffSeconds;
+            else totalDistracted += diffSeconds;
+          }
+
+          lastTimestamp = curr.timestamp;
+        }
+
+        const avgBreak =
+          breakIntervals.length > 0
+            ? (breakIntervals.reduce((a, b) => a + b, 0) /
+                breakIntervals.length /
+                60).toFixed(2)
+            : 0;
+
+        setSummary({
+          totalFocusedMinutes: (totalFocused / 60).toFixed(2),
+          totalDistractedMinutes: (totalDistracted / 60).toFixed(2),
+          focusBreaks: breaks,
+          avgTimeBetweenBreaks: avgBreak,
+        });
+      });
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-md mt-6 border border-gray-100">
-      <h3 className="text-xl font-bold mb-4 text-gray-800">
-        🔍 Focus Visibility Over Time
-      </h3>
+    <div className="bg-white p-4 rounded-xl shadow mt-6">
+      <h3 className="text-lg font-semibold mb-4">Focus Visibility Over Time</h3>
 
-      <ResponsiveContainer width="100%" height={250}>
-        <LineChart data={focusData} margin={{ top: 10, right: 30, left: 0, bottom: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-          <XAxis dataKey="time" tick={{ fontSize: 12 }} />
-          <YAxis
-            domain={[0, 1]}
-            tickFormatter={(val) => (val === 1 ? "Visible" : "Hidden")}
-            tick={{ fontSize: 12 }}
-          />
-          <Tooltip
-            formatter={(value) => (value === 1 ? "Visible" : "Hidden")}
-            labelStyle={{ fontWeight: "bold" }}
-          />
-          <Legend verticalAlign="top" height={36} />
+      <ResponsiveContainer width="100%" height={200}>
+        <LineChart data={focusData}>
+          <XAxis dataKey="time" />
+          <YAxis domain={[0, 1]} ticks={[0, 1]} />
+          <Tooltip />
           <Line
             type="monotone"
             dataKey="focus"
-            stroke="#4CAF50"
-            strokeWidth={3}
-            dot={{ r: 4, strokeWidth: 2, fill: "#4CAF50" }}
-            name="Focus"
+            stroke="#6B9080"
+            strokeWidth={2}
           />
         </LineChart>
       </ResponsiveContainer>
+
+      <div className="mt-4 text-sm text-secondary space-y-2">
+        <div>
+          <span className="font-bold">Total Focused Time:</span>{" "}
+          {summary.totalFocusedMinutes} minutes
+        </div>
+        <div>
+          <span className="font-bold">Total Distracted Time:</span>{" "}
+          {summary.totalDistractedMinutes} minutes
+        </div>
+        <div>
+          <span className="font-bold">Number of Focus Breaks:</span>{" "}
+          {summary.focusBreaks}
+        </div>
+        <div>
+          <span className="font-bold">Average Time Between Breaks:</span>{" "}
+          {summary.avgTimeBetweenBreaks} minutes
+        </div>
+      </div>
     </div>
   );
 }
