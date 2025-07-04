@@ -61,8 +61,8 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const MoodLog = require("./mood");
-const FocusLog = require("./focus");
+const {MoodLog} = require("./mood");
+const {FocusLog} = require("./focus");
 const QuizData = require("../models/Quiz");
 
 // Initialize Gemini
@@ -110,7 +110,7 @@ ${JSON.stringify(quiz.answers || quiz)}
 `;
 
     // 2. Call Gemini
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
     const text = result.response.text();
 

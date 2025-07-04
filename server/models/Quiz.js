@@ -18,11 +18,6 @@ const quizSchema = new mongoose.Schema({
       traits: [String], // Optional: for first-time quiz
     },
   ],
-  inferredCondition: {
-    type: String,
-    enum: ["Autism", "ADHD", "OCD", "None", "Other"],
-    default: "None",
-  },
 
   // For Mood Comic (optional fields)
   selectedComic: String, // For mood comic: e.g., "zoning-out.png"
