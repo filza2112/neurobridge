@@ -95,7 +95,8 @@ router.post("/submit-quiz", async (req, res) => {
       primaryCondition,
     });
 
-    await quiz.save();
+    const saved=await quiz.save();
+    res.status(201).json(saved);
 
     return res
       .status(201)

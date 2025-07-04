@@ -76,7 +76,8 @@ const WeeklyQuiz = () => {
       <div className="p-6 max-w-3xl mx-auto">
         <h2 className="text-2xl font-bold mb-4">Weekly Results</h2>
         <div className="space-y-2">
-          {Object.entries(result.scores).map(([trait, score]) => (
+          {result?.scores && Object.entries(result.scores).map(([trait, score]) => (
+
             <div
               key={trait}
               className="flex justify-between items-center border-b py-2"
