@@ -11,7 +11,7 @@ const WeeklyQuiz = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const userId = localStorage.getItem("userId") || "dev_user_123";
+  const userId = localStorage.getItem("userId") || "dev_user_123" ;
 
   useEffect(() => {
     const fetchWeeklyQuestions = async () => {

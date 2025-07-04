@@ -3,9 +3,15 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
+
 const authRoutes = require("./routes/auth");
 const focusModule = require("./routes/focus");
 const moodModule = require("./routes/mood");
+
+const authRoutes = require('./routes/auth');
+const { router: focusRoutes } = require("./routes/focus");
+const {router:moodRoutes} = require("./routes/mood");
+
 const routineRoutes = require("./routes/routine");
 const quizRoutes = require("./routes/quiz");
 

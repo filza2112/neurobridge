@@ -14,12 +14,19 @@ function RoutineBuilder() {
 
   // Fetch tasks (smart + personal)
   useEffect(() => {
-    fetch("http://localhost:5000/api/tasks/all?userId=demo-user")
-      .then((res) => res.json())
-      .then((fetchedTasks) => {
-        reorderTasks(fetchedTasks);
-      });
+    const fetchTasks = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/tasks/all?userId=dev_user_123");
+        const data = await res.json();
+        if (Array.isArray(data)) setTasks(data);
+        else console.error("Invalid task format:", data);
+      } catch (err) {
+        console.error("Failed to load tasks:", err);
+      }
+    };
+    fetchTasks();
   }, []);
+
 
   // Smart reordering based on mood/focus weights
   const reorderTasks = (taskArray) => {
@@ -41,41 +48,37 @@ function RoutineBuilder() {
   // Smart Task Generation
   const handleSmartGenerate = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/tasks/smart-generate?userId=demo-user");
+      const res = await fetch("http://localhost:5000/api/tasks/smart-generate?userId=dev_user_123");
+
+      const data = await res.json(); // ✅ only call .json() ONCE
 
       if (!res.ok) {
-        const errorData = await res.json();
-        console.error("Backend error:", errorData);
-        alert(errorData.error || "Failed to generate tasks");
+        console.error("Backend error:", data);
+        alert(data.error || "Failed to generate tasks");
         return;
       }
-
-      const data = await res.json();
-      console.log("Generated tasks:", data);
 
       if (!Array.isArray(data)) {
         console.error("Expected an array but got:", data);
-        alert(data.error || "Invalid response format from AI");
+        alert(data.error || "Invalid response format");
         return;
       }
 
-      if (data.length === 0) {
-        alert("No tasks were generated. Try adjusting quiz answers or mood.");
-        return;
-      }
+      // ✅ Merge new tasks with existing, avoiding duplicates
+      setTasks((prevTasks) => {
+        const existingIds = new Set(prevTasks.map((t) => t._id));
+        const merged = [...prevTasks];
+        data.forEach((task) => {
+          if (!existingIds.has(task._id)) merged.push(task);
+        });
+        return merged;
+      });
 
-      // Update state or reorder task list
-      reorderTasks(data);
-
-      // Optional: show confirmation
-      alert("Smart routine generated successfully!");
     } catch (err) {
       console.error("Network or parsing error:", err);
-      alert("Could not connect to the task generator. Please check your server or internet.");
+      alert("Could not connect to task generator.");
     }
   };
-
-
 
   const handleTaskUpdate = (updatedTasks) => {
     setTasks(updatedTasks);

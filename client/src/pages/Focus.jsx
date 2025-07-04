@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import MoodSlider from "../features/FocusandMood/MoodSlider";
-import MoodDiary from "../features/FocusandMood/Diary";
 import CPTGame from "../features/FocusandMood/CPTGame";
 import FocusChart from "../features/FocusandMood/FocusChart";
 import MoodChart from "../features/FocusandMood/MoodChart";
@@ -80,11 +79,6 @@ function FocusPage() {
                 </div>
             </section>
 
-            {/* Mood Diary */}
-            <section className="bg-background-alt p-6 rounded-2xl shadow-lg mt-6">
-                <h2 className="text-2xl font-semibold mb-4">Mood Diary</h2>
-                <MoodDiary />
-            </section>
             <Footer/>
             
         </div >

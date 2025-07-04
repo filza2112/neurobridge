@@ -95,12 +95,15 @@ router.post("/submit-quiz", async (req, res) => {
       primaryCondition,
     });
 
-    const saved=await quiz.save();
-    res.status(201).json(saved);
+    const saved = await quiz.save();
 
-    return res
-      .status(201)
-      .json({ message: "Quiz submitted", scores, primaryCondition });
+    return res.status(201).json({
+      message: "Quiz submitted",
+      scores,
+      primaryCondition,
+      savedQuiz: saved,
+    });
+
   } catch (error) {
     console.error("Error submitting quiz:", error);
     res.status(500).json({ error: "Server error" });

@@ -42,7 +42,7 @@ const Navbar = () => {
         <div className="w-full md:w-[1080px] h-[80px] px-4 md:px-0 mx-auto flex justify-between items-center">
           {/* Logo */}
           <a href="/" className="cursor-pointer py-7 pr-7">
-            <span className="text-white text-xl md:text-2xl font-bold">Neuro+ Bridge</span>
+            <span className="text-white text-xl md:text-2xl font-bold">NeuroBridge</span>
           </a>
 
           {/* Hamburger Menu Button for Mobile */}
