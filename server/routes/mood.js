@@ -54,4 +54,4 @@ router.post("/api/mood/submit", async (req, res) => {
 
 
 
-module.exports = router;
+module.exports = {router, MoodLog};

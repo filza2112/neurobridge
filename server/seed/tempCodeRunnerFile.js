@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const QuizQuestion = require("../models/QuizQuestion");
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGO_URI = process.env.MONGO_URI;
 
 const questions = [
   // —— ADHD (Likert, 5 questions) ——
@@ -285,7 +285,7 @@ const questions = [
   //weekly
   {
     id: "adhd_weekly_1",
-    category: "ADHD",
+    category: "Focus",
     type: "weekly",
     question: "I was able to stay focused on tasks without getting distracted.",
     options: [
@@ -298,7 +298,7 @@ const questions = [
   },
   {
     id: "adhd_weekly_2",
-    category: "ADHD",
+    category: "Persistence",
     type: "weekly",
     question:
       "I managed to follow through with tasks without abandoning them midway.",
@@ -312,7 +312,7 @@ const questions = [
   },
   {
     id: "adhd_weekly_3",
-    category: "ADHD",
+    category: "Impulsivity",
     type: "weekly",
     question: "I felt in control of my impulses throughout the week.",
     options: [
@@ -325,7 +325,7 @@ const questions = [
   },
   {
     id: "adhd_weekly_4",
-    category: "ADHD",
+    category: "Hyperactivity",
     type: "weekly",
     question: "I could sit still or remain calm when required.",
     options: [
@@ -338,7 +338,7 @@ const questions = [
   },
   {
     id: "adhd_weekly_5",
-    category: "ADHD",
+    category: "Organization",
     type: "weekly",
     question: "I planned my schedule and stuck to it.",
     options: [
@@ -351,7 +351,7 @@ const questions = [
   },
   {
     id: "adhd_weekly_6",
-    category: "ADHD",
+    category: "Memory",
     type: "weekly",
     question:
       "I remembered appointments and responsibilities without reminders.",
@@ -365,7 +365,7 @@ const questions = [
   },
   {
     id: "adhd_weekly_7",
-    category: "ADHD",
+    category: "Time Management",
     type: "weekly",
     question: "I completed tasks on time without procrastination.",
     options: [
@@ -378,7 +378,7 @@ const questions = [
   },
   {
     id: "adhd_weekly_8",
-    category: "ADHD",
+    category: "Focus",
     type: "weekly",
     question: "I avoided multitasking and focused on one task at a time.",
     options: [
@@ -391,7 +391,7 @@ const questions = [
   },
   {
     id: "adhd_weekly_9",
-    category: "ADHD",
+    category: "Environment",
     type: "weekly",
     question: "I minimized interruptions or distractions in my environment.",
     options: [
@@ -404,7 +404,7 @@ const questions = [
   },
   {
     id: "adhd_weekly_10",
-    category: "ADHD",
+    category: "Attention",
     type: "weekly",
     question: "I felt in control of my attention and energy levels.",
     options: [
@@ -418,7 +418,7 @@ const questions = [
 
   {
     id: "ocd_weekly_1",
-    category: "OCD",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I experienced fewer obsessive thoughts than usual.",
     options: [
@@ -431,7 +431,7 @@ const questions = [
   },
   {
     id: "ocd_weekly_2",
-    category: "OCD",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I was able to resist the urge to perform compulsive actions.",
     options: [
@@ -444,7 +444,7 @@ const questions = [
   },
   {
     id: "ocd_weekly_3",
-    category: "OCD",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I felt less anxious when routines were disrupted.",
     options: [
@@ -457,7 +457,7 @@ const questions = [
   },
   {
     id: "ocd_weekly_4",
-    category: "OCD",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I spent less time rechecking or rereading tasks.",
     options: [
@@ -470,7 +470,7 @@ const questions = [
   },
   {
     id: "ocd_weekly_5",
-    category: "OCD",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I felt more in control of my thoughts and behaviors.",
     options: [
@@ -483,7 +483,7 @@ const questions = [
   },
   {
     id: "ocd_weekly_6",
-    category: "OCD",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I could delay or avoid compulsive rituals without distress.",
     options: [
@@ -496,7 +496,7 @@ const questions = [
   },
   {
     id: "ocd_weekly_7",
-    category: "OCD",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I accepted uncertainty more easily than before.",
     options: [
@@ -509,7 +509,7 @@ const questions = [
   },
   {
     id: "ocd_weekly_8",
-    category: "OCD",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I experienced fewer urges to organize or control things.",
     options: [
@@ -522,7 +522,7 @@ const questions = [
   },
   {
     id: "ocd_weekly_9",
-    category: "OCD",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I challenged my intrusive thoughts with rational thinking.",
     options: [
@@ -535,7 +535,7 @@ const questions = [
   },
   {
     id: "ocd_weekly_10",
-    category: "OCD",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I felt less emotional distress from unwanted thoughts.",
     options: [
@@ -549,7 +549,7 @@ const questions = [
 
   {
     id: "autism_weekly_1",
-    category: "Autism",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I felt more comfortable during social interactions this week.",
     options: [
@@ -562,7 +562,7 @@ const questions = [
   },
   {
     id: "autism_weekly_2",
-    category: "Autism",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I was flexible with changes in plans or routines.",
     options: [
@@ -575,7 +575,7 @@ const questions = [
   },
   {
     id: "autism_weekly_3",
-    category: "Autism",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I felt less overwhelmed by loud noises or bright lights.",
     options: [
@@ -588,7 +588,7 @@ const questions = [
   },
   {
     id: "autism_weekly_4",
-    category: "Autism",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I expressed myself clearly when talking to others.",
     options: [
@@ -601,7 +601,7 @@ const questions = [
   },
   {
     id: "autism_weekly_5",
-    category: "Autism",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I tried new activities or adapted to changes easily.",
     options: [
@@ -614,7 +614,7 @@ const questions = [
   },
   {
     id: "autism_weekly_6",
-    category: "Autism",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I managed transitions between tasks or environments better.",
     options: [
@@ -627,7 +627,7 @@ const questions = [
   },
   {
     id: "autism_weekly_7",
-    category: "Autism",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I participated in group activities with less anxiety.",
     options: [
@@ -640,7 +640,7 @@ const questions = [
   },
   {
     id: "autism_weekly_8",
-    category: "Autism",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I handled unexpected situations with more calmness.",
     options: [
@@ -653,7 +653,7 @@ const questions = [
   },
   {
     id: "autism_weekly_9",
-    category: "Autism",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I was more tolerant of sensory discomforts.",
     options: [
@@ -666,7 +666,7 @@ const questions = [
   },
   {
     id: "autism_weekly_10",
-    category: "Autism",
+    category: "Weekly Progress",
     type: "weekly",
     question: "I practiced or improved social skills intentionally.",
     options: [
@@ -682,8 +682,8 @@ const questions = [
 async function seed() {
   try {
     
-    console.log("MONGODB_URI:", MONGODB_URI);
-    await mongoose.connect(MONGODB_URI); // ← Check if it's undefined or malformed
+    console.log("MONGODB_URI:", MONGO_URI);
+    await mongoose.connect(MONGO_URI); // ← Check if it's undefined or malformed
 
     console.log("Connected to MongoDB");
 

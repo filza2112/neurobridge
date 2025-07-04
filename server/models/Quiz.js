@@ -11,6 +11,15 @@ const quizSchema = new mongoose.Schema({
   },
 
   // For first & weekly quiz
+
+  answers: [
+    {
+      question: String,
+      answer: String, // Optional: e.g., attention, mood, etc.
+      traits: [String], // Optional: for first-time quiz
+    },
+  ],
+
   inferredScores: {
     ADHD: { type: Number, default: 0 },
     OCD: { type: Number, default: 0 },
@@ -22,6 +31,7 @@ const quizSchema = new mongoose.Schema({
     enum: ["ADHD", "OCD", "Autism", "None"],
     default: "None",
   },
+
 
   // For Mood Comic (optional fields)
   selectedComic: String, // For mood comic: e.g., "zoning-out.png"
