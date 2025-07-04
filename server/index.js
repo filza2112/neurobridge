@@ -4,19 +4,27 @@ const cors = require("cors");
 require("dotenv").config();
 
 const focusRoutes = require("./routes/focus");
-const moodRoutes = require("./routes/mood"); 
+const moodRoutes = require("./routes/mood");
 const routineRoutes = require("./routes/routine");
-const quizRoutes = require("./routes/quiz"); 
+const quizRoutes = require("./routes/quiz");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => console.log("MongoDB connected"))
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("MongoDB connected");
+    console.log("Using DB:", mongoose.connection.name); // move it here
+  })
   .catch((err) => console.error("MongoDB error:", err));
+
+console.log("hi");
+
 
 app.use("/api/focus", focusRoutes);
 app.use("/api/mood", moodRoutes);
