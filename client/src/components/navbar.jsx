@@ -76,7 +76,7 @@ const Navbar = () => {
           </ul>
 
           {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex space-x-6 items-center">
+          {/* <div className="hidden md:flex space-x-6 items-center">
             {token ? (
               <button
                 onClick={handleLogout}
@@ -101,7 +101,7 @@ const Navbar = () => {
                 </button>
               </>
             )}
-          </div>
+          </div> */}
         </div>
 
         {/* Mobile Menu Dropdown */}
