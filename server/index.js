@@ -3,10 +3,11 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
+const authRoutes = require('./routes/auth');
 const focusRoutes = require("./routes/focus");
 const moodRoutes = require("./routes/mood");
 const routineRoutes = require("./routes/routine");
-const quizRoutes = require("./routes/quiz");
+const quizRoutes = require("./routes/quiz"); 
 
 const app = express();
 app.use(cors());
@@ -22,9 +23,6 @@ mongoose
     console.log("Using DB:", mongoose.connection.name); // move it here
   })
   .catch((err) => console.error("MongoDB error:", err));
-
-console.log("hi");
-
 
 app.use("/api/focus", focusRoutes);
 app.use("/api/mood", moodRoutes);
