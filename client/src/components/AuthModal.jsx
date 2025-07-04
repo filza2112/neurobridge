@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
+import { useAuth } from '../AuthContext';
 
 const AuthModal = ({ isOpen, onClose, isSignupMode, setSignupMode }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
+  const { login } = useAuth();
   const isSignup = isSignupMode;
 
   const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     const url = isSignup ? '/auth/signup' : '/auth/login';
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}${url}`, formData);
-      alert(res.data.message);
-      onClose(); // Close modal on success
+      const res = await api.post(url, formData);
+      if (res.data.token) {
+        login(res.data.token); // This now sets the token globally
+        onClose(); // Close modal on success
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong.');
     }

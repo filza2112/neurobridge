@@ -3,7 +3,7 @@ import firstQuizQuestions from "./quizdata/first"; // your questions array
 import axios from "axios";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { useAuth } from "../../auth/AuthContext"; // modify if your auth context is elsewhere
+// import { useAuth } from "../../auth/AuthContext"; // modify if your auth context is elsewhere
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -14,7 +14,7 @@ const FirstQuiz = () => {
   const [responses, setResponses] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState(null);
-  const { user } = useAuth(); // Ensure this returns user._id
+  // const { user } = useAuth(); // Ensure this returns user._id
 
   const handleSelect = (index) => {
     const updated = [...responses];
@@ -43,7 +43,7 @@ const FirstQuiz = () => {
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/quiz/submit-quiz`,
         {
-          userId: user._id,
+          // userId: user._id,
           type: "first",
           responses: formattedResponses,
         }
