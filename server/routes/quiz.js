@@ -225,13 +225,11 @@ router.post("/quiz-submit", async (req, res) => {
       submittedAt: new Date(),
     });
 
-    await quiz.save();
+    const saved = await quiz.save();
 
-    return res.status(201).json({
-      message: "Quiz submitted successfully",
-      scores,
-      primaryCondition,
-    });
+    return res
+      .status(201)
+      .json({ message: "Quiz submitted", scores, primaryCondition });
   } catch (error) {
     console.error("Error in quiz-submit:", error);
     res.status(500).json({ error: "Server error" });

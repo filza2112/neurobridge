@@ -3,16 +3,25 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
+
+const focusModule = require("./routes/focus");
+const moodModule = require("./routes/mood");
+const pomodoroRoutes = require("./routes/pomodoro");
+const distractionRoutes = require("./routes/distraction");
+const attentionRoutes = require("./routes/attention");
+
 const authRoutes = require('./routes/auth');
-const focusRoutes = require("./routes/focus");
-const moodRoutes = require("./routes/mood");
+const { router: focusRoutes } = require("./routes/focus");
+const {router:moodRoutes} = require("./routes/mood");
+
 const routineRoutes = require("./routes/routine");
-const quizRoutes = require("./routes/quiz"); 
+const quizRoutes = require("./routes/quiz");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// MongoDB Connection
 mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -20,16 +29,16 @@ mongoose
   })
   .then(() => {
     console.log("MongoDB connected");
-    console.log("Using DB:", mongoose.connection.name); // move it here
+    console.log("Using DB:", mongoose.connection.name);
   })
   .catch((err) => console.error("MongoDB error:", err));
 
-app.use("/api/focus", focusRoutes.router);
-app.use("/api/mood", moodRoutes.router);
+app.use("/api/focus", focusRoutes);
+app.use("/api/mood", moodRoutes);
 app.use("/api/tasks", routineRoutes);
 app.use("/api/quiz", quizRoutes);
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = app;

@@ -8,6 +8,7 @@ const taskSchema = new mongoose.Schema({
   type: { type: String, enum: ["smart", "personal"] },
   estimatedTime: Number, // in minutes
   completed: { type: Boolean, default: false },
+  conditions: [String],
   moodLevel: Number, // 0–100 (for smart reordering)
   focusLevel: Number, // 0–1
 });

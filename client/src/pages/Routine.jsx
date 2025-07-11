@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import TaskList from "../features/RoutineBuilder/TaskList";
 import AddTaskModal from "../features/RoutineBuilder/AddTaskModel";
 import TaskAnalytics from "../features/RoutineBuilder/TaskAnalytics";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 
 const userId = "demo-user";
 
@@ -12,12 +14,19 @@ function RoutineBuilder() {
 
   // Fetch tasks (smart + personal)
   useEffect(() => {
-    fetch("http://localhost:5000/api/tasks/all?userId=demo-user")
-      .then((res) => res.json())
-      .then((fetchedTasks) => {
-        reorderTasks(fetchedTasks);
-      });
+    const fetchTasks = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/tasks/all?userId=dev_user_123");
+        const data = await res.json();
+        if (Array.isArray(data)) setTasks(data);
+        else console.error("Invalid task format:", data);
+      } catch (err) {
+        console.error("Failed to load tasks:", err);
+      }
+    };
+    fetchTasks();
   }, []);
+
 
   // Smart reordering based on mood/focus weights
   const reorderTasks = (taskArray) => {
@@ -39,23 +48,37 @@ function RoutineBuilder() {
   // Smart Task Generation
   const handleSmartGenerate = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/tasks/smart-generate?userId=demo-user");
-      const data = await res.json();
+      const res = await fetch("http://localhost:5000/api/tasks/smart-generate?userId=dev_user_123");
 
-      if (!Array.isArray(data)) {
-        console.error("Expected an array but got:", data);
+      const data = await res.json(); // ✅ only call .json() ONCE
+
+      if (!res.ok) {
+        console.error("Backend error:", data);
         alert(data.error || "Failed to generate tasks");
         return;
       }
 
-      reorderTasks(data); // only if it's a valid array
+      if (!Array.isArray(data)) {
+        console.error("Expected an array but got:", data);
+        alert(data.error || "Invalid response format");
+        return;
+      }
+
+      // ✅ Merge new tasks with existing, avoiding duplicates
+      setTasks((prevTasks) => {
+        const existingIds = new Set(prevTasks.map((t) => t._id));
+        const merged = [...prevTasks];
+        data.forEach((task) => {
+          if (!existingIds.has(task._id)) merged.push(task);
+        });
+        return merged;
+      });
+
     } catch (err) {
       console.error("Network or parsing error:", err);
       alert("Could not connect to task generator.");
     }
   };
-
-
 
   const handleTaskUpdate = (updatedTasks) => {
     setTasks(updatedTasks);
@@ -64,7 +87,8 @@ function RoutineBuilder() {
 
   return (
     <div className="p-6 font-mullish min-h-screen bg-background">
-      <h1 className="text-3xl font-bold mb-6 text-primary">🗓 Daily Routine Builder</h1>
+      <Navbar />
+      <h1 className="text-3xl font-bold mt-4 mb-6 text-primary text-center">🗓 Daily Routine Builder</h1>
 
       <div className="flex flex-wrap gap-4 mb-6">
         <button onClick={handleSmartGenerate} className="btn-primary">✨ Generate Smart Tasks</button>
@@ -82,7 +106,9 @@ function RoutineBuilder() {
       <div className="mt-8 text-text-secondary text-sm text-center">
         💡 Missed a task? Try a lighter fallback. You can always regenerate tasks if your mood or focus changes.
       </div>
+      <Footer />
     </div>
+
   );
 }
 
