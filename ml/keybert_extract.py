@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from keybert import KeyBERT
 
+#to extract triggers
 kw_model = KeyBERT("all-MiniLM-L6-v2")
 app = Flask(__name__)
 

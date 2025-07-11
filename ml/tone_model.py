@@ -4,6 +4,7 @@ import joblib
 from sklearn.svm import SVC
 from flask import Flask, request, jsonify
 
+#to judge tone
 # Dummy model (for illustration)
 model = joblib.load("tone_svm_model.pkl")  # Assume pre-trained SVM
 
