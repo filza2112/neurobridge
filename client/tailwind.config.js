@@ -10,6 +10,7 @@ module.exports = {
         'background': '#FFFFFF', 
         'background-alt': '#EAF4F4',
         'accent': '#CCE3DE',  
+        'text-dark':'#4a6459',
         'text-secondary': '#A4C3B2', 
         'primary': '#6B9080', 
       },

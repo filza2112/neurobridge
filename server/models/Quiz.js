@@ -32,7 +32,7 @@ const quizSchema = new mongoose.Schema({
     default: "None",
   },
 
-
+  
   // For Mood Comic (optional fields)
   selectedComic: String, // For mood comic: e.g., "zoning-out.png"
   moodLabel: String, // Optional tag like "calm", "anxious"

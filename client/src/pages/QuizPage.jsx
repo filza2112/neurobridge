@@ -5,41 +5,29 @@ const QuizPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const goHome = () => navigate("/");
-  const goDashboard = () => navigate("/dashboard");
+  const isOnMainQuizPage = location.pathname === "/features/quiz";
 
-  const isSubRoute = location.pathname !== "/features/quiz";
+  const goHome = () =>
+    isOnMainQuizPage ? navigate("/") : navigate("/features/quiz");
+  const goDashboard = () => navigate("/dashboard");
 
   return (
     <div className="min-h-screen bg-background text-primary font-mullish px-4 py-6">
       {/* Top Bar */}
       <div className="flex justify-between items-center mb-10 border-b border-accent pb-4">
         <button onClick={goHome} className="text-xl hover:text-accent">
-          🏠 Home
+          {isOnMainQuizPage ? "Home" : "Quiz Home"}
         </button>
         <h1 className="text-3xl font-bold text-center">Quiz Page</h1>
         <button onClick={goDashboard} className="text-xl hover:text-accent">
-          📊 Dashboard
+          Dashboard
         </button>
       </div>
 
-      {/* Show back to options only when inside a quiz route */}
-      {isSubRoute && (
-        <div className="mb-6 text-center">
-          <button
-            onClick={() => navigate("/features/quiz")}
-            className="text-sm text-accent underline hover:text-primary"
-          >
-            ← Back to Quiz Options
-          </button>
-        </div>
-      )}
-
-      {/* Render nested quiz component if routed */}
+      {/* Nested quiz component or main menu */}
       <Outlet />
 
-      {/* Render main menu if on /features/quiz */}
-      {!isSubRoute && (
+      {isOnMainQuizPage && (
         <div className="flex flex-col items-center gap-6">
           <QuizCard
             title="🧠 First-Time Quiz"
