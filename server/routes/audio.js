@@ -3,12 +3,12 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-const { classifyTone } = require("../services/tone");
 const { analyzeSentiment } = require("../services/sentiment");
+const { classifyTone } = require("../services/tone");
+const { transcribeAudio } = require("../services/stt");
 
 const router = express.Router();
 
-// Setup Multer for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = path.join(__dirname, "../uploads");
@@ -22,20 +22,19 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-/**
- * POST /api/audio/upload
- * Accepts audio file and processes it
- */
-router.post("/upload", upload.single("audio"), async (req, res) => {
+router.post("/transcribe", upload.single("audio"), async (req, res) => {
   try {
     const filePath = req.file.path;
 
-    // Step 1: Transcribe audio (mock or use Whisper API)
-    const transcript = "I’m feeling very tired today."; // TODO: Replace with real transcription
+    // 🧠 Transcribe
+    const transcript = await transcribeAudio(filePath);
 
-    // Step 2: Run NLP
+    // 💬 Analyze
     const sentiment = await analyzeSentiment(transcript);
-    const tone = classifyTone(transcript);
+    const tone = await classifyTone(transcript);
+
+    // 🧹 Clean up
+    fs.unlinkSync(filePath);
 
     res.json({
       message: "Audio processed",
