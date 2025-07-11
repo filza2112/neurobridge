@@ -4,9 +4,11 @@ const cors = require("cors");
 require("dotenv").config();
 
 
-const authRoutes = require("./routes/auth");
 const focusModule = require("./routes/focus");
 const moodModule = require("./routes/mood");
+const pomodoroRoutes = require("./routes/pomodoro");
+const distractionRoutes = require("./routes/distraction");
+const attentionRoutes = require("./routes/attention");
 
 const authRoutes = require('./routes/auth');
 const { router: focusRoutes } = require("./routes/focus");
@@ -34,8 +36,11 @@ mongoose
 // Ensure we're using the correct router from modules that export multiple items
 app.use("/api/focus", focusModule.router || focusModule);
 app.use("/api/mood", moodModule.router || moodModule);
-app.use("/api/tasks", routineRoutes); // This exports only router
-app.use("/api/quiz", quizRoutes);     // This exports only router
+app.use("/api/tasks", routineRoutes); 
+app.use("/api/quiz", quizRoutes);   
+app.use("/api/pomodoro", pomodoroRoutes);
+app.use("/api/distraction", distractionRoutes);
+app.use("/api/attention", attentionRoutes);
 
 // Example fallback route or root endpoint
 app.get("/", (req, res) => {

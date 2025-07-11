@@ -137,7 +137,7 @@ function CPTGame() {
     <div
       ref={containerRef}
       tabIndex={0}
-      className="bg-white p-6 rounded-2xl shadow text-center"
+      className="flex flex-col justify-center items-center min-h-screen bg-background p-6 rounded-xl shadow-lg max-w-xl w-full mx-auto"
       onKeyDown={handleKeyPress}
     >
 
