@@ -1,4 +1,3 @@
-// src/pages/Chat.jsx
 import React, { useState, useRef, useEffect } from "react";
 import VoiceInput from "../features/chat/VoiceInput";
 
@@ -11,7 +10,7 @@ export default function EmotionChat() {
 
   const handleSend = async (text) => {
     if (!text.trim()) return;
-    setInput(""); // clear input box
+    setInput("");
 
     setMessages((prev) => [...prev, { sender: "user", text }]);
 
@@ -50,22 +49,22 @@ export default function EmotionChat() {
   }, [messages]);
 
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-4">
-      <h2 className="text-2xl font-bold text-center mb-4">
-        🎙️ Emotion Chat Assistant
+    <div className="min-h-screen bg-background-alt text-text-dark p-6 font-mullish">
+      <h2 className="text-3xl font-bold text-center mb-6 text-primary">
+        🎙️ NeuroBridge Chat Assistant
       </h2>
 
       <div
         ref={chatBoxRef}
-        className="bg-white p-4 rounded-lg shadow h-96 overflow-y-auto border border-gray-200"
+        className="bg-white text-text-dark p-4 rounded-lg shadow h-96 overflow-y-auto border border-accent"
       >
         {messages.map((m, i) => (
           <div
             key={i}
-            className={`mb-2 ${
+            className={`mb-3 p-3 rounded-lg max-w-[80%] ${
               m.sender === "user"
-                ? "text-right text-blue-600"
-                : "text-left text-gray-800"
+                ? "bg-accent ml-auto text-right"
+                : "bg-background-alt text-left"
             }`}
           >
             {m.text}
@@ -73,21 +72,21 @@ export default function EmotionChat() {
         ))}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2 items-center mt-6">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend(input)}
-          className="flex-1 p-2 border rounded"
+          className="flex-1 p-2 border border-accent rounded-md text-text-dark"
           placeholder="Type your thoughts..."
         />
         <button
           onClick={() => handleSend(input)}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-primary text-white px-4 py-2 rounded hover:bg-[#5f7f6f]"
         >
           Send
         </button>
-        <VoiceInput onTranscribe={setInput} />
+        <VoiceInput onTranscribe={(text) => setInput(text)} />
       </div>
     </div>
   );
