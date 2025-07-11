@@ -1,4 +1,4 @@
-export function detectToneFromTranscript(text) {
+function classifyTone(text) {
   const tones = [
     { keyword: "nervous", tone: "anxious" },
     { keyword: "angry", tone: "angry" },
@@ -15,3 +15,5 @@ export function detectToneFromTranscript(text) {
 
   return "neutral";
 }
+
+module.exports = { classifyTone };
