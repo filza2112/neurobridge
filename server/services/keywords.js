@@ -1,4 +1,4 @@
-keywords.js
+
 // Simulated keyword extractor using word frequency and stopword filtering
 
 const stopwords = new Set([
