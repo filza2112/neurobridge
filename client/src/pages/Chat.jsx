@@ -1,74 +1,109 @@
+// src/pages/EmotionChat.jsx
 import React, { useState, useRef, useEffect } from "react";
+import VoiceInput from "../features/chat/VoiceInput"; // You’ll create this next
 
-const Chat = () => {
+export default function EmotionChat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const chatEndRef = useRef(null);
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+  const userId = "dev_user123"; // Replace with real user ID if needed
+  const chatBoxRef = useRef(null);
 
-    const userMessage = { sender: "user", text: input };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
+  const handleSend = async (text, fromVoice = false) => {
+    if (!text.trim()) return;
+    setInput(""); // clear input box
 
-    // Dummy bot reply — replace with backend later
-    const botReply = await getBotReply(input);
-    setMessages((prev) => [...prev, { sender: "bot", text: botReply }]);
+    // Append user's message
+    setMessages((prev) => [...prev, { sender: "user", text }]);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/chat/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, userId }),
+      });
+      const data = await res.json();
+
+      // Append analysis result
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          text: `🧠 Sentiment: ${data.label}, Tone: ${data.tone || "N/A"}`,
+        },
+      ]);
+
+      // Ask follow-up if emotion is strong
+      if (Math.abs(data.score) > 0.7 || data.tone === "frustrated") {
+        const response = await fetch("http://localhost:5000/api/chat/respond", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: `User just expressed ${data.label} and tone is ${data.tone}. Ask empathetically why.`,
+            userId,
+          }),
+        });
+        const bot = await response.json();
+        setMessages((prev) => [...prev, { sender: "bot", text: bot.response }]);
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: "⚠️ Sorry, something went wrong." },
+      ]);
+    }
   };
 
-  const getBotReply = async (text) => {
-    // TODO: replace this with Whisper + Bark backend call
-    return `You said: "${text}". Let’s explore that further.`;
-  };
-
+  // Scroll to bottom on new message
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    chatBoxRef.current?.scrollTo(0, chatBoxRef.current.scrollHeight);
   }, [messages]);
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") sendMessage();
-  };
-
   return (
-    <div className="max-w-2xl mx-auto p-4 h-[90vh] flex flex-col border rounded-xl shadow bg-white">
-      <h1 className="text-xl font-bold mb-4 text-center">
-        🧠 NeuroBridge Chat
-      </h1>
+    <div className="p-6 max-w-2xl mx-auto space-y-4">
+      <h2 className="text-2xl font-bold text-center mb-4">
+        🎙️ Emotion Chat Assistant
+      </h2>
 
-      <div className="flex-1 overflow-y-auto space-y-2 p-2 bg-gray-50 rounded-md border">
-        {messages.map((msg, idx) => (
+      {/* Message Display */}
+      <div
+        ref={chatBoxRef}
+        className="bg-white p-4 rounded-lg shadow h-96 overflow-y-auto border border-gray-200"
+      >
+        {messages.map((m, i) => (
           <div
-            key={idx}
-            className={`p-3 rounded-lg max-w-[80%] ${
-              msg.sender === "user"
-                ? "bg-blue-100 self-end text-right"
-                : "bg-gray-200 self-start text-left"
+            key={i}
+            className={`mb-2 ${
+              m.sender === "user"
+                ? "text-right text-blue-600"
+                : "text-left text-gray-800"
             }`}
           >
-            {msg.text}
+            {m.text}
           </div>
         ))}
-        <div ref={chatEndRef} />
       </div>
 
-      <div className="flex mt-4 gap-2">
+      {/* Text Input */}
+      <div className="flex gap-2">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Type your message..."
-          className="flex-1 px-4 py-2 border rounded-lg shadow-sm"
+          onKeyDown={(e) => e.key === "Enter" && handleSend(input)}
+          className="flex-1 p-2 border rounded"
+          placeholder="Type your thoughts..."
         />
         <button
-          onClick={sendMessage}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+          onClick={() => handleSend(input)}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           Send
         </button>
       </div>
+
+      {/* Voice Input */}
+      <VoiceInput onTranscribe={handleSend} />
     </div>
   );
-};
-
-export default Chat;
+}
