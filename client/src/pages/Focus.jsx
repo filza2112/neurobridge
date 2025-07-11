@@ -48,8 +48,9 @@ function FocusPage() {
     }, [startTime]);
 
     return (
+        <>
+        <Navbar />
         <div className="font-mullish bg-background min-h-screen text-primary p-6">
-            <Navbar />
             <h1 className="text-3xl font-bold text-center mb-2 mt-4">Focus & Mood Tracker</h1>
             <div className="text-center mb-4 text-text-secondary">
                 <p>Track your focus and mood to improve your mental well-being.</p>
@@ -88,6 +89,7 @@ function FocusPage() {
             <Footer/>
             
         </div >
+        </>
     );
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
+import Navbar from "../components/navbar";
 
 const QuizPage = () => {
   const navigate = useNavigate();
@@ -11,18 +12,10 @@ const QuizPage = () => {
   const isSubRoute = location.pathname !== "/features/quiz";
 
   return (
+    <>
+    <Navbar />
     <div className="min-h-screen bg-background text-primary font-mullish px-4 py-6">
-      {/* Top Bar */}
-      <div className="flex justify-between items-center mb-10 border-b border-accent pb-4">
-        <button onClick={goHome} className="text-xl hover:text-accent">
-          🏠 Home
-        </button>
-        <h1 className="text-3xl font-bold text-center">Quiz Page</h1>
-        <button onClick={goDashboard} className="text-xl hover:text-accent">
-          📊 Dashboard
-        </button>
-      </div>
-
+      
       {/* Show back to options only when inside a quiz route */}
       {isSubRoute && (
         <div className="mb-6 text-center">
@@ -59,6 +52,7 @@ const QuizPage = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

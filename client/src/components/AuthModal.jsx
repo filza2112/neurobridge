@@ -1,12 +1,13 @@
+// cleint/src/components/AuthModal.jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api';
-import { useAuth } from '../AuthContext';
 
 const AuthModal = ({ isOpen, onClose, isSignupMode, setSignupMode }) => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
-  const { login } = useAuth();
   const isSignup = isSignupMode;
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -16,14 +17,20 @@ const AuthModal = ({ isOpen, onClose, isSignupMode, setSignupMode }) => {
     e.preventDefault();
     setError('');
     const url = isSignup ? '/auth/signup' : '/auth/login';
+
     try {
-      const res = await api.post(url, formData);
-      if (res.data.token) {
-        login(res.data.token); // This now sets the token globally
-        onClose(); // Close modal on success
+      const response = await api.post(url, formData);
+
+      if (response.status === 200 || response.status === 201) {
+        // Success: redirect to homepage
+        onClose();
+        navigate('/homepage');
+      } else {
+        setError('Something went wrong');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong.');
+      const message = err.response?.data?.message || 'Authentication failed';
+      setError(message);
     }
   };
 

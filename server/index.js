@@ -26,6 +26,7 @@ mongoose
   .catch((err) => console.error("MongoDB error:", err));
 
 // Ensure we're using the correct router from modules that export multiple items
+app.use('/auth', authRoutes);
 app.use("/api/focus", focusModule.router || focusModule);
 app.use("/api/mood", moodModule.router || moodModule);
 app.use("/api/tasks", routineRoutes); // This exports only router

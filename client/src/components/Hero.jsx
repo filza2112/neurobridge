@@ -1,8 +1,10 @@
 
-import React from 'react';
+import {React, useState} from 'react';
 import image1 from '../assets/images/image1.png'
 import image2 from '../assets/images/image2.png'
-import Dashboard from './dashboard';
+import AuthModal from './AuthModal';
+import Dashboard from './features';
+// import AuthModal from './AuthModal';
 
 
 const RightArrowIcon = ({ className }) => (
@@ -37,8 +39,20 @@ const CheckIcon = ({ className }) => (
 );
 
 const MainContent = () => {
+   const [showModal, setShowModal] = useState(false);
+  const [isSignupMode, setSignupMode] = useState(false);
+
+  const openModal = (signup = false) => {
+    setSignupMode(signup);
+    setShowModal(true);
+  };
+
+  const closeModal = () => setShowModal(false);
   return (
     <>
+    <section>
+
+    </section>
      
       <section className="relative bg-primary w-full ">
         <div className="flex flex-col-reverse md:flex-row mx-auto max-w-[920px] items-center md:justify-between py-10 px-4 md:px-0 space-y-8 md:space-y-0 md:space-x-8">
@@ -51,26 +65,24 @@ const MainContent = () => {
             <p className="text-white font-mullish text-base md:text-[18px] leading-7 opacity-70">
               Build adaptive routines, track focus, engage with AI therapy, and boost skills with our NeuroPlay Zone. Designed for ADHD, Autism, and OCD.
             </p>
-            <button className="px-4 py-[12px] md:px-3 md:py-[14px] bg-white text-primary rounded-md hover:bg-text-secondary transition-all duration-200 font-mullish font-bold">
+            <button className="px-4 py-[12px] md:px-3 md:py-[14px] bg-white text-primary rounded-md hover:bg-text-secondary transition-all duration-200 font-mullish font-bold"
+            onClick={() => openModal(false)} >
               Get Started Now
             </button>
           </div>
         
-          <div className="w-full max-w-[350px] md:max-w-[500px] h-[200px] md:h-[300px] flex items-center justify-center text-primary text-center mt-8 md:mt-0 mb-0">
+          <div className="w-full max-w-[350px] md:max-w-[500px] h-[200px] md:h-[300px] text-primary text-center mt-8 md:mt-0 mb-[-10px]">
             <img src={image1} alt="Logo" />;
           </div>
         </div>
       </section>
 
     
-      <section className="relative mt-[60px] md:mt-[190px] overflow-hidden bg-background py-8 md:py-0">
+      <section className="relative mt-[30px] overflow-hidden bg-background py-8 md:py-0">
         <div className="relative w-11/12 max-w-[1080px] mx-auto px-4 md:px-0">
-          <h2 className="font-extrabold font-mullish text-center text-xl md:text-2xl leading-[1.2] text-primary">
-            Unlock Your Potential with Our Core Features
-          </h2>
+    
           <div className="w-6 h-1 bg-text-secondary mx-auto mt-4 mb-6"></div>
           <section className="relative max-w-[1200px] mx-auto overflow-hidden bg-background py-8 md:py-0">
-      <Dashboard />
       </section>
           <div className=" mt-[80px] md:mt-[30px] w-full min-h-[auto] md:min-h-[520px] bg-background-alt flex flex-col md:flex-row rounded-mb relative p-6 md:p-10 md:py-12 border border-accent items-center md:items-stretch">
             <div className="flex flex-col justify-between w-full md:w-1/2 order-2 md:order-1 mt-6 md:mt-0">
@@ -117,11 +129,21 @@ const MainContent = () => {
               <img src={image2} alt="Logo" />;
             </div>
           </div>
+          
         </div>
-      </section>
-      
-
         
+      </section>
+      {/* <div class="w-6 h-1 bg-text-secondary mx-auto mt-4 mb-6"></div> */}
+      <h2 className="font-extrabold font-mullish text-center text-xl md:text-2xl leading-[1.2] text-primary mt-[30px]">
+            Unlock Your Potential with Our Core Features
+      </h2>
+      <div class="w-6 h-1 bg-text-secondary mx-auto mt-4 mb-6"></div>
+      <AuthModal
+        isOpen={showModal}
+        onClose={closeModal}
+        isSignupMode={isSignupMode}
+        setSignupMode={setSignupMode}
+      />   
     </>
   );
 };

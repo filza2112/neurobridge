@@ -1,53 +1,27 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import api from './api'; // We will create this file next
+// src/AuthContext.jsx
+import React, { createContext, useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-      try {
-        const decoded = JSON.parse(atob(storedToken.split('.')[1]));
-        setUser({ _id: decoded.user.id });
-      } catch (e) {
-        console.error("Failed to decode token", e);
-        localStorage.removeItem('token');
-        setToken(null);
-      }
-    }
-    setLoading(false);
-  }, []);
-
-  const login = (newToken) => {
-    localStorage.setItem('token', newToken);
+  // We move navigate *inside* the login/logout functions
+  const login = (newToken, navigate) => {
     setToken(newToken);
-    try {
-      const decoded = JSON.parse(atob(newToken.split('.')[1]));
-      setUser({ _id: decoded.user.id });
-    } catch (e) {
-      console.error("Failed to decode token on login", e);
-    }
+    localStorage.setItem('token', newToken);
+    navigate('/dashboard');
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
+  const logout = (navigate) => {
     setToken(null);
-    setUser(null);
+    localStorage.removeItem('token');
+    navigate('/');
   };
-  
-  // Don't render children until we've checked for a token
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
-    <AuthContext.Provider value={{ token, user, login, logout }}>
+    <AuthContext.Provider value={{ token, login, logout, isAuthenticated: !!token }}>
       {children}
     </AuthContext.Provider>
   );
