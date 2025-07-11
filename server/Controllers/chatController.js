@@ -1,78 +1,94 @@
 const ChatLog = require("../models/ChatLog");
-const axios = require("axios");
-const { sendEmailAlert } = require("../utils/sendEmailAlert"); // Use require if not using ES modules
-const User = require("../models/user"); // To get user's alertEmail
+const { analyzeSentiment } = require("../services/sentiment");
+const { classifyTone } = require("../services/tone");
+const { extractKeywords } = require("../services/keywords");
+const { sendAlertEmail } = require("../services/email");
+
+const NEGATIVE_THRESHOLD = -0.7;
+const ALERT_TONES = ["angry", "anxious", "frustrated"];
 
 exports.analyzeMessage = async (req, res) => {
-  const { userId, text } = req.body;
-
   try {
-    const sentimentRes = await axios.post("http://localhost:7002/sentiment", { text });
-    const toneRes = await axios.post("http://localhost:7000/analyze-tone", req.body.audioBlob);
-    const keywordsRes = await axios.post("http://localhost:7001/extract-keywords", { text });
+    const { userId, text, email } = req.body;
 
-    const sentiment = sentimentRes.data;
-    const tone = toneRes.data.tone;
-    const keywords = keywordsRes.data.keywords;
+    if (!userId || !text) {
+      return res.status(400).json({ error: "Missing userId or text" });
+    }
+
+    const sentiment = await analyzeSentiment(text);
+    const tone = await classifyTone(text);
+    const keywords = await extractKeywords(text);
 
     const alertTriggered =
-      sentiment.score < -0.7 || ["angry", "frustrated", "anxious"].includes(tone);
+      sentiment.score < NEGATIVE_THRESHOLD || ALERT_TONES.includes(tone);
 
-    const log = await ChatLog.create({
+    const entry = new ChatLog({
       userId,
       text,
+      timestamp: new Date(),
       sentiment: sentiment.sentiment,
       score: sentiment.score,
       tone,
       trigger_keywords: keywords,
-      timestamp: new Date(),
       alert_triggered: alertTriggered,
     });
 
-    if (alertTriggered) {
-      // Find the user's alert email
-      const user = await User.findOne({ _id: userId });
-      if (user && user.alertEmail) {
-        await sendEmailAlert(
-          user.alertEmail,
-          "NeuroBridge Alert: Mood/Tone Triggered",
-          `Alert for user ${user.name || user.email}: "${text}"`
-        );
-      }
+    await entry.save();
+
+    // Optional: Send Email Alert
+    if (alertTriggered && email) {
+      await sendAlertEmail(
+        email,
+        "🛑 NeuroBridge Alert: Mood Warning",
+        `User ${userId} has shown signs of distress.\n\nMessage: "${text}"\nTone: ${tone}\nSentiment score: ${sentiment.score}`
+      );
     }
 
-    res.json(log);
+    res.json({
+      sentiment,
+      tone,
+      keywords,
+      alert_triggered: alertTriggered,
+    });
   } catch (err) {
-    console.error("Error:", err);
-    res.status(500).json({ error: "Failed to analyze message" });
+    console.error("Error in chatController:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
+// Get all chat logs for a user (most recent first)
 exports.getUserLogs = async (req, res) => {
-  const { userId } = req.params;
-  const logs = await ChatLog.find({ userId }).sort({ timestamp: -1 });
-  res.json(logs);
+  try {
+    const { userId } = req.params;
+    const logs = await ChatLog.find({ userId }).sort({ timestamp: -1 });
+    res.json(logs);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch chat logs" });
+  }
 };
 
+// Get a summary of chat logs for a user
 exports.getSummary = async (req, res) => {
-  const { userId } = req.params;
-  const logs = await ChatLog.find({ userId }).sort({ timestamp: -1 });
-  const recent = logs.slice(0, 10);
+  try {
+    const { userId } = req.params;
+    const logs = await ChatLog.find({ userId });
 
-  const triggers = {};
-  recent.forEach((log) => {
-    log.trigger_keywords.forEach((k) => {
-      triggers[k] = (triggers[k] || 0) + 1;
+    const total = logs.length;
+    const negative = logs.filter((log) => log.score < 0).length;
+    const alerts = logs.filter((log) => log.alert_triggered).length;
+    const avgScore = total
+      ? logs.reduce((sum, log) => sum + (log.score || 0), 0) / total
+      : 0;
+
+    res.json({
+      total,
+      negative,
+      alerts,
+      avgScore,
+      lastMessage: logs[0]?.text || null,
+      lastTimestamp: logs[0]?.timestamp || null,
     });
-  });
-
-  res.json({
-    count: logs.length,
-    recentMood: recent.map((l) => ({
-      mood: l.sentiment,
-      score: l.score,
-      time: l.timestamp,
-    })),
-    triggers,
-  });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch summary" });
+  }
 };

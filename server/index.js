@@ -4,6 +4,10 @@ const cors = require("cors");
 require("dotenv").config();
 
 
+const app = express();
+app.use(cors());
+app.use(express.json());
+
 const focusModule = require("./routes/focus");
 const moodModule = require("./routes/mood");
 const pomodoroRoutes = require("./routes/pomodoro");
@@ -11,6 +15,7 @@ const distractionRoutes = require("./routes/distraction");
 const attentionRoutes = require("./routes/attention");
 const chatRoutes = require("./routes/chatRouts");
 const alertRoutes = require("./routes/alert");
+const audioRoutes = require("./routes/audio");
 
 const authRoutes = require('./routes/auth');
 const { router: focusRoutes } = require("./routes/focus");
@@ -19,9 +24,6 @@ const {router:moodRoutes} = require("./routes/mood");
 const routineRoutes = require("./routes/routine");
 const quizRoutes = require("./routes/quiz");
 
-const app = express();
-app.use(cors());
-app.use(express.json());
 
 // MongoDB Connection
 mongoose
@@ -46,6 +48,7 @@ app.use("/api/distraction", distractionRoutes);
 app.use("/api/attention", attentionRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/alert", alertRoutes);
+app.use("/api/audio", audioRoutes);
 
 // Example fallback route or root endpoint
 app.get("/", (req, res) => {

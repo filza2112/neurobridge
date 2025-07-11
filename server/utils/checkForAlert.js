@@ -1,5 +1,5 @@
 import { sendEmailAlert } from "../utils/sendEmailAlert.js";
-import User from "../models/user.js";
+import User from "./models/user";
 
 export async function checkForAlert({ userId, sentiment, score, tone, triggerKeywords }) {
   const user = await User.findById(userId);
