@@ -24,8 +24,8 @@ mongoose
   })
   .catch((err) => console.error("MongoDB error:", err));
 
-app.use("/api/focus", focusRoutes);
-app.use("/api/mood", moodRoutes);
+app.use("/api/focus", focusRoutes.router);
+app.use("/api/mood", moodRoutes.router);
 app.use("/api/tasks", routineRoutes);
 app.use("/api/quiz", quizRoutes);
 

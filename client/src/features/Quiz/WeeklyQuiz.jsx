@@ -10,6 +10,7 @@ const WeeklyQuiz = () => {
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const userId = localStorage.getItem("userId") || "dev_user_123";
 
@@ -27,8 +28,6 @@ const WeeklyQuiz = () => {
     };
     fetchWeeklyQuestions();
   }, [userId]);
-
-  const likertOptions = ["Never", "Sometimes", "Often", "Always"];
 
   const handleChange = (questionId, index) => {
     setResponses((prev) => ({ ...prev, [questionId]: index }));
@@ -94,6 +93,8 @@ const WeeklyQuiz = () => {
     );
   }
 
+  const currentQuestion = questions[currentIndex];
+
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-2">Weekly Check-in</h2>
@@ -106,33 +107,69 @@ const WeeklyQuiz = () => {
         <p>Loading weekly questions...</p>
       ) : (
         <div className="space-y-6">
-          {questions.map((q) => (
-            <div key={q.id} className="border rounded p-4 shadow-sm">
-              <p className="font-medium mb-2">{q.question}</p>
-              <div className="flex flex-wrap gap-2">
-                {likertOptions.map((opt, index) => (
-                  <label key={index} className="cursor-pointer">
-                    <input
-                      type="radio"
-                      name={q.id}
-                      value={index}
-                      checked={responses[q.id] === index}
-                      onChange={() => handleChange(q.id, index)}
-                      className="mr-1"
-                    />
-                    {opt}
-                  </label>
-                ))}
-              </div>
-            </div>
-          ))}
-          <button
-            onClick={handleSubmit}
-            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
-            disabled={loading}
+          <div
+            key={currentQuestion.id}
+            className="border rounded p-4 shadow-sm"
           >
-            {loading ? "Submitting..." : "Submit Weekly Check-in"}
-          </button>
+            <p className="font-medium mb-2">{currentQuestion.question}</p>
+            <div className="flex flex-wrap gap-2">
+              {currentQuestion.options.map((opt, index) => (
+                <label key={index} className="cursor-pointer">
+                  <input
+                    type="radio"
+                    name={currentQuestion.id}
+                    value={index}
+                    checked={responses[currentQuestion.id] === index}
+                    onChange={() => handleChange(currentQuestion.id, index)}
+                    className="mr-1"
+                  />
+                  {opt.text}
+                </label>
+              ))}
+            </div>
+
+            {/* Progress Bar */}
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2 my-4">
+            <div
+              className="bg-green-600 h-2 rounded-full transition-all duration-300"
+              style={{
+                width: `${((currentIndex + 1) / questions.length) * 100}%`,
+              }}
+            />
+          </div>
+          <div className="flex justify-end items-center gap-4">
+            {currentIndex > 0 && (
+              <button
+                onClick={() => setCurrentIndex((prev) => prev - 1)}
+                className="text-gray-600 hover:underline"
+              >
+                Back
+              </button>
+            )}
+
+            <button
+              onClick={() => {
+                if (responses[currentQuestion.id] === undefined) {
+                  alert("Please answer the question.");
+                  return;
+                }
+                if (currentIndex < questions.length - 1) {
+                  setCurrentIndex((prev) => prev + 1);
+                } else {
+                  handleSubmit();
+                }
+              }}
+              className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+              disabled={loading}
+            >
+              {currentIndex === questions.length - 1
+                ? loading
+                  ? "Submitting..."
+                  : "Submit Check-in"
+                : "Next"}
+            </button>
+          </div>
         </div>
       )}
     </div>
