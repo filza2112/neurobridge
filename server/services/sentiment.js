@@ -1,18 +1,14 @@
-const { pipeline } = require("@xenova/transformers");
+const vader = require("vader-sentiment");
 
-let sentimentPipeline;
+function analyzeSentiment(text) {
+  const loweredText = text.toLowerCase();
+  const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(text);
+  const compound = intensity.compound;
 
-async function analyzeSentiment(text) {
-  if (!sentimentPipeline) {
-    sentimentPipeline = await pipeline("sentiment-analysis");
-  }
-
-  const result = await sentimentPipeline(text);
-  const label = result[0].label.toLowerCase();
-  const score = result[0].score;
   return {
-    sentiment: label,
-    score: label === "positive" ? score : -score,
+    sentiment:
+      compound > 0.2 ? "positive" : compound < -0.2 ? "negative" : "neutral",
+    score: compound,
   };
 }
 

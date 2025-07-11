@@ -13,6 +13,7 @@ const moodModule = require("./routes/mood");
 const pomodoroRoutes = require("./routes/pomodoro");
 const distractionRoutes = require("./routes/distraction");
 const attentionRoutes = require("./routes/attention");
+
 const chatRoutes = require("./routes/chatRouts");
 const alertRoutes = require("./routes/alert");
 const audioRoutes = require("./routes/audio");
@@ -42,7 +43,6 @@ mongoose
 app.use("/api/focus", focusModule.router || focusModule);
 app.use("/api/mood", moodModule.router || moodModule);
 app.use("/api/tasks", routineRoutes); 
-app.use("/api/quiz", quizRoutes);   
 app.use("/api/pomodoro", pomodoroRoutes);
 app.use("/api/distraction", distractionRoutes);
 app.use("/api/attention", attentionRoutes);
