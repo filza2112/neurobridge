@@ -9,6 +9,8 @@ const moodModule = require("./routes/mood");
 const pomodoroRoutes = require("./routes/pomodoro");
 const distractionRoutes = require("./routes/distraction");
 const attentionRoutes = require("./routes/attention");
+const chatRoutes = require("./routes/chatRouts");
+const alertRoutes = require("./routes/alert");
 
 const authRoutes = require('./routes/auth');
 const { router: focusRoutes } = require("./routes/focus");
@@ -41,6 +43,8 @@ app.use("/api/quiz", quizRoutes);
 app.use("/api/pomodoro", pomodoroRoutes);
 app.use("/api/distraction", distractionRoutes);
 app.use("/api/attention", attentionRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/alert", alertRoutes);
 
 // Example fallback route or root endpoint
 app.get("/", (req, res) => {
