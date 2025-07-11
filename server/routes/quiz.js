@@ -175,7 +175,7 @@ router.post("/submit-first-quiz", async (req, res) => {
 
 
 
-router.post("/quiz-submit", async (req, res) => {
+router.post("/submit-quiz", async (req, res) => {
   const { userId, type, responses } = req.body;
 
   if (!userId || !type || !Array.isArray(responses)) {
