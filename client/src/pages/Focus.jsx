@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import MoodSlider from "../features/FocusandMood/MoodSlider";
 
 import CPTGame from "../features/FocusandMood/CPTGame";
@@ -10,9 +10,6 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
 
-
-
-const userId = "demo-user";
 
 function FocusPage() {
     const [startTime, setStartTime] = useState(Date.now());
@@ -60,20 +57,20 @@ function FocusPage() {
             </div>
             {/* Focus Tracking */}
             <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
-                <PomodoroTimer userId={userId} />
-                <Distraction userId={userId} />
+                <PomodoroTimer/>
+                <Distraction />
             </section>
 
             <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
                 <CPTGame />
-                <CustomAttentionTest userId={userId} />
+                <CustomAttentionTest/>
             </section>
 
 
 
             {/* Mood Tracking */}
             <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
-                <MoodSlider userId={userId} />
+                <MoodSlider />
             </section>
 
             <Footer />
