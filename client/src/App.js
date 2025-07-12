@@ -1,9 +1,7 @@
-// client/src/App.js
-import React, { useState } from 'react';
-import { Routes, Route, Router } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/login';
-import Dashboard from './pages/homepage';
-import Homepage from './pages/homepage';
+import DashBoard from './pages/homepage';
+import Homepage from './pages/loggedin';
 import RoutineBuilderPage from './pages/Routine';
 import FocusMoodTrackerPage from './pages/Focus';
 import QuizPage from './pages/QuizPage';
@@ -11,18 +9,21 @@ import Chat from "./pages/Chat";
 import FirstQuiz from "./features/Quiz/FirstQuiz";
 import WeeklyQuiz from "./features/Quiz/WeeklyQuiz";
 import MoodComic from './features/Quiz/MoodComic';
-import ProtectedRoute from './components/ProtectedRoute';
-import AuthModal from './components/AuthModal'
+import Game from './components/MemoryGame';
+
+
 
 
 
 export default function App() {
-  const [isSignupMode, setSignupMode] = useState(false);
+
   return (
     
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/homepage" element={<Homepage />} />
+        <Route path="/dashbaord" element={<DashBoard />} />
+
         <Route
           path="/features/routine-builder"
           element={<RoutineBuilderPage />}
@@ -44,4 +45,4 @@ export default function App() {
 }
 
 
-import SmiskiMemoryMatch from '../components/MemoryGame/Memorylogic';
+

@@ -14,7 +14,7 @@ const features = [
   {
     id: "focus-mood-tracker",
     icon: "🎯",
-    title: "Focus & Mood Tracker",
+    title: "Focus Tracker",
     description: "Passive tracking using phone usage, typing patterns",
     tags: ["ADHD", "Autism"], 
   },
@@ -41,6 +41,13 @@ const features = [
       "Gamified brain training zone with adaptive levels for attention, inhibition control, and social skills",
     tags: ["ADHD", "Autism", "OCD"],
   },
+  {
+    id: "focus-mood-tracker",
+    icon: "😊",
+    title: "Mood Tracker",
+    description: "Passive tracking using phone usage, typing patterns",
+    tags: ["ADHD", "Autism"], 
+  },
 ];
 
 export default function FeatureSection() {
@@ -58,7 +65,6 @@ const [showModal, setShowModal] = useState(false);
       {features.map((feature) => (
         <Link
           key={feature.id}
-          onClick={() => openModal(false)}
           className="rounded-2xl shadow-md transition-all duration-300 hover:scale-105 hover:bg-[#CCE3DE] bg-[#EAF4F4] p-5 block no-underline" // 'block no-underline' to make Link behave like a div and remove default link underline
         >
           <div className="text-3xl mb-2">{feature.icon}</div>

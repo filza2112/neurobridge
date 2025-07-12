@@ -39,8 +39,8 @@ const CheckIcon = ({ className }) => (
   </svg>
 );
 
-const MainContent = () => {
-   const [showModal, setShowModal] = useState(false);
+const MainContent = ({showButton}) => {
+  const [showModal, setShowModal] = useState(false);
   const [isSignupMode, setSignupMode] = useState(false);
 
   const openModal = (signup = false) => {
@@ -66,10 +66,11 @@ const MainContent = () => {
             <p className="text-white font-mullish text-base md:text-[18px] leading-7 opacity-70">
               Build adaptive routines, track focus, engage with AI therapy, and boost skills with our NeuroPlay Zone. Designed for ADHD, Autism, and OCD.
             </p>
-            <button className="px-4 py-[12px] md:px-3 md:py-[14px] bg-white text-primary rounded-md hover:bg-text-secondary transition-all duration-200 font-mullish font-bold"
+            {showButton && (<button className="px-4 py-[12px] md:px-3 md:py-[14px] bg-white text-primary rounded-md hover:bg-text-secondary transition-all duration-200 font-mullish font-bold"
             onClick={() => openModal(false)} >
               Get Started Now
             </button>
+            )}
           </div>
         
           <div className="w-full max-w-[350px] md:max-w-[500px] h-[200px] md:h-[300px] text-primary text-center mt-8 md:mt-0 mb-[-10px]">
