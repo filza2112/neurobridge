@@ -4,6 +4,7 @@ import image1 from '../assets/images/image1.png'
 import image2 from '../assets/images/image2.png'
 import AuthModal from './AuthModal';
 import Dashboard from './features';
+import Shape from '../assets/images/svg1.svg';
 // import AuthModal from './AuthModal';
 
 
@@ -76,6 +77,7 @@ const MainContent = () => {
           </div>
         </div>
       </section>
+      <img src={Shape} alt="Logo" />;
 
     
       <section className="relative mt-[30px] overflow-hidden bg-background py-8 md:py-0">
@@ -125,7 +127,7 @@ const MainContent = () => {
               </div>
             </div>
         
-            <div className="static md:absolute max-w-[400px] md:max-w-[600px] right-0 bottom-0 w-full h-[250px] md:h-[300px] flex items-center justify-center text-primary text-center order-1 md:order-2">
+            <div className="static md:absolute max-w-[400px] md:max-w-[600px] right-0 botton-0 w-full h-[250px] md:h-[300px] flex items-center justify-center text-primary text-center order-1 md:order-2 md:mt-[70px]">
               <img src={image2} alt="Logo" />;
             </div>
           </div>

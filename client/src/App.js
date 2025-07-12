@@ -1,6 +1,6 @@
 // client/src/App.js
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Router } from 'react-router-dom';
 import LoginPage from './pages/login';
 import Dashboard from './pages/homepage';
 import Homepage from './pages/homepage';
@@ -14,12 +14,15 @@ import MoodComic from './features/Quiz/MoodComic';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthModal from './components/AuthModal'
 
+
+
 export default function App() {
   const [isSignupMode, setSignupMode] = useState(false);
   return (
-    <Router>
+    
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/homepage" element={<Homepage />} />
         <Route
           path="/features/routine-builder"
           element={<RoutineBuilderPage />}
@@ -36,6 +39,6 @@ export default function App() {
         </Route>
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
-    </Router>
+  
   );
 }

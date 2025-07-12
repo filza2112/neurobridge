@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AuthModal from './AuthModal';
+import Logo from '../assets/images/logo.png';
 
 const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -16,7 +17,13 @@ const Navbar = () => {
     <>
       <nav className="bg-primary px-12 py-4 flex justify-between items-center">
         {/* Brand Name */}
-        <h1 className="text-white text-[27px] font-bold">Neuro+ Bridge</h1>
+        <div className='flex space-x-1'>
+          <img src={Logo} alt="" className='h-[50px] w-[50px] mt-[-10px]'/>
+<span className="text-transparent bg-gradient-to-r from-white via-accent to-text-secondary bg-clip-text text-xl md:text-3xl font-bold tracking-wide drop-shadow-md">
+  Neuro+ Bridge
+</span>
+</div>
+
 
         {/* Auth Buttons */}
         <div className="space-x-4 flex">

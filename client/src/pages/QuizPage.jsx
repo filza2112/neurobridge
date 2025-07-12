@@ -18,7 +18,8 @@ const QuizPage = () => {
     <div className="min-h-screen bg-background text-primary font-mullish px-4 py-6">
       
       {/* Show back to options only when inside a quiz route */}
-      {isSubRoute && (
+      {/* {isSubRoute && ( */}
+      {(
         <div className="mb-6 text-center">
           <button
             onClick={() => navigate("/features/quiz")}
