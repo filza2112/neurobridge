@@ -5,7 +5,7 @@ import TaskAnalytics from "../features/RoutineBuilder/TaskAnalytics";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
-
+const userId = localStorage.getItem("userId") || "dev_user_123";
 function RoutineBuilder() {
   const [tasks, setTasks] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);

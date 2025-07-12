@@ -7,7 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
+const userId=localStorage.getItem("userId") || "dev_user_123"
 function MoodChart() {
   const [moodData, setMoodData] = useState([]);
 

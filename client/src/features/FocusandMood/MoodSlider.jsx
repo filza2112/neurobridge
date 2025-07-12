@@ -24,7 +24,7 @@ const moodTags = [
   "Accomplished"
 ];
 
-
+const userId = localStorage.getItem("userId") || "dev_user_123";
 function MoodSlider() {
   const [moodIndex, setMoodIndex] = useState(2); // Default to "Neutral"
   const [why, setWhy] = useState("");

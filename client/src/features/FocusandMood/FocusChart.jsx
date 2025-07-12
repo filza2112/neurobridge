@@ -7,7 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
+const userId=localStorage.getItem("userId") || "dev_user_123"
 function FocusChart() {
   const [focusData, setFocusData] = useState([]);
   const [summary, setSummary] = useState({

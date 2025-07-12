@@ -10,7 +10,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
 
-
+const userId = localStorage.getItem("userId") || "dev_user_123";
 function FocusPage() {
     const [startTime, setStartTime] = useState(Date.now());
 
@@ -48,35 +48,34 @@ function FocusPage() {
     }, [startTime]);
 
     return (
-        <>
+      <>
         <Navbar />
         <div className="font-mullish bg-background min-h-screen text-primary p-6">
-            <h1 className="text-3xl font-bold text-center mb-2 mt-4">Focus & Mood Tracker</h1>
-            <div className="text-center mb-4 text-text-secondary">
-                <p>Track your focus and mood to improve your mental well-being.</p>
-            </div>
-            {/* Focus Tracking */}
-            <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
-                <PomodoroTimer/>
-                <Distraction />
-            </section>
+          <h1 className="text-3xl font-bold text-center mb-2 mt-4">
+            Focus & Mood Tracker
+          </h1>
+          <div className="text-center mb-4 text-text-secondary">
+            <p>Track your focus and mood to improve your mental well-being.</p>
+          </div>
+          {/* Focus Tracking */}
+          <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
+            <PomodoroTimer userId={userId} />
+            <Distraction userId={userId} />
+          </section>
 
-            <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
-                <CPTGame />
-                <CustomAttentionTest/>
-            </section>
+          <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
+            <CPTGame />
+            <CustomAttentionTest userId={userId} />
+          </section>
 
+          {/* Mood Tracking */}
+          <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
+            <MoodSlider userId={userId} />
+          </section>
 
-
-            {/* Mood Tracking */}
-            <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
-                <MoodSlider />
-            </section>
-
-            <Footer />
-
-        </div >
-        </>
+          <Footer />
+        </div>
+      </>
     );
 }
 

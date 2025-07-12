@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 
+const userId = localStorage.getItem("userId") || "dev_user_123";
 function TaskAnalytics({ completed, total }) {
   const [completionData, setCompletionData] = useState([]);
   const percent = total > 0 ? Math.round((completed / total) * 100) : 0;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+const userId = localStorage.getItem("userId") || "dev_user_123";
 function AddTaskModal({ onClose, setTasks }) {
   const [title, setTitle] = useState("");
   const [time, setTime] = useState(30);
@@ -10,7 +10,7 @@ function AddTaskModal({ onClose, setTasks }) {
     setLoading(true);
 
     const task = {
-      userId: "demo-user",
+      userId: userId,
       title,
       estimatedTime: time,
       type: "personal",
