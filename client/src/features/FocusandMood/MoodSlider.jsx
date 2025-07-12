@@ -37,7 +37,7 @@ function MoodSlider() {
     setLoading(true);
 
     const moodEntry = {
-      userId: "demo-user",
+      userId: userId,
       timestamp: new Date().toISOString(),
       mood: moodIndex * 25,
       emoji: emojis[moodIndex],

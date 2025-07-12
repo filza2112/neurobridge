@@ -12,7 +12,7 @@ function MoodChart() {
   const [moodData, setMoodData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/mood/all?userId=demo-user")
+    fetch(`http://localhost:5000/api/mood/all/userId=${userId}`)
 
       .then((res) => res.json())
       .then((data) => {

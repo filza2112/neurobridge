@@ -5,7 +5,6 @@ import TaskAnalytics from "../features/RoutineBuilder/TaskAnalytics";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
-const userId = "demo-user";
 
 function RoutineBuilder() {
   const [tasks, setTasks] = useState([]);
@@ -16,7 +15,7 @@ function RoutineBuilder() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/tasks/all?userId=dev_user_123");
+        const res = await fetch(`http://localhost:5000/api/tasks/all/userId=${userId}`);
         const data = await res.json();
         if (Array.isArray(data)) setTasks(data);
         else console.error("Invalid task format:", data);
@@ -48,7 +47,7 @@ function RoutineBuilder() {
   // Smart Task Generation
   const handleSmartGenerate = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/tasks/smart-generate?userId=dev_user_123");
+      const res = await fetch(`http://localhost:5000/api/tasks/smart-generate/userId=${userId}`);
 
       const data = await res.json(); // ✅ only call .json() ONCE
 

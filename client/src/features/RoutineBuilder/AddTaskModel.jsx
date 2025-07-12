@@ -25,7 +25,7 @@ function AddTaskModal({ onClose, setTasks }) {
       });
 
       // 🔁 Fetch the full updated task list
-      const allRes = await fetch("http://localhost:5000/api/tasks/all?userId=demo-user");
+      const allRes = await fetch(`http://localhost:5000/api/tasks/all/userId=${userId}`);
       const updatedTasks = await allRes.json();
       setTasks(updatedTasks);
       onClose(); // ✅ Automatically close modal after adding

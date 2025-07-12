@@ -18,7 +18,7 @@ function FocusChart() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/focus/all?userId=demo-user")
+    fetch(`http://localhost:5000/api/focus/all/userId=${userId}`)
       .then((res) => res.json())
       .then((data) => {
         const entries = data.focusLogs;

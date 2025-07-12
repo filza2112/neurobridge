@@ -20,7 +20,7 @@ function CPTGame() {
   const intervalRef = useRef(null);
   const timerRef = useRef(null);
   const resultRef = useRef([]);
-  const userId = "demo-user";
+  const userId = userId;
   const containerRef = useRef(null);
   let injectAXNext = useRef(false);
 
