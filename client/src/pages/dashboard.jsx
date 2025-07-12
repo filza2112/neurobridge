@@ -3,9 +3,14 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import MoodChart from "../features/FocusandMood/MoodChart";
 import FocusChart from "../features/FocusandMood/FocusChart";
+import WeeklyProgressChart from "../components/WeeklyProgressChart";
+
+const userId = localStorage.getItem("userId");
 
 const Dashboard = () => {
+  
   return (
+
     <div className="font-mullish bg-background min-h-screen flex flex-col">
       <Navbar />
 
@@ -19,8 +24,6 @@ const Dashboard = () => {
           {/* Combined Focus & Mood Section */}
           <DashboardCard title="Focus & Mood">
             <div className="space-y-4">
-              <MoodChart />
-              <FocusChart />
             </div>
           </DashboardCard>
 
@@ -37,7 +40,12 @@ const Dashboard = () => {
             <p className="text-gray-600">
               Take your quiz or view weekly results.
             </p>
-            {/* TODO: Add Quiz chart / summary / CTA */}
+            <WeeklyProgressChart />
+          </DashboardCard>
+
+          {/* Triggers Section */}
+          <DashboardCard title="Quiz">
+            <p className="text-gray-600">Triggers.</p>
           </DashboardCard>
         </div>
       </main>

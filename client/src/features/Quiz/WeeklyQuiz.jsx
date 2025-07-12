@@ -12,7 +12,7 @@ const WeeklyQuiz = () => {
   const [loading, setLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const userId = localStorage.getItem("userId") || "dev_user_123" ;
+  const userId = localStorage.getItem("userId") || "dev_user_123";
 
   useEffect(() => {
     const fetchWeeklyQuestions = async () => {
@@ -74,22 +74,13 @@ const WeeklyQuiz = () => {
     return (
       <div className="p-6 max-w-3xl mx-auto">
         <h2 className="text-2xl font-bold mb-4">Weekly Results</h2>
-        <div className="space-y-2">
-          {result?.scores && Object.entries(result.scores).map(([trait, score]) => (
-
-            <div
-              key={trait}
-              className="flex justify-between items-center border-b py-2"
-            >
-              <span>{trait}</span>
-              <span>{score}</span>
-            </div>
-          ))}
-        </div>
-        <p className="mt-6 text-lg">
-          Your current patterns are most aligned with:{" "}
-          <strong>{result.primaryCondition}</strong>
-        </p>
+        {result?.primaryCondition && result?.scores && (
+          <div className="flex justify-between items-center border-b py-2">
+            <span>{result.primaryCondition}</span>
+            <span>{result.scores[result.primaryCondition]}</span>
+          </div>
+        )}
+        <p className="mt-6 text-lg">{result.displayResult}</p>
       </div>
     );
   }

@@ -25,7 +25,7 @@
     "react-router-dom": "^7.6.3",
     "react-scripts": "5.0.1",
     "react-sketch-canvas": "^6.2.0",
-    "recharts": "^3.0.2",
+    "recharts": "^3.1.0",
     "three": "^0.150.1",
     "web-vitals": "^2.1.4"
   },
