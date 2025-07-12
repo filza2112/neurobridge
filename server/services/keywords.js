@@ -1,27 +1,30 @@
+const { getGeminiResponse } = require("./gemini");
 
-// Simulated keyword extractor using word frequency and stopword filtering
+exports.extractKeywords = async (text) => {
+  const prompt = `
+You are a smart assistant. The user shared the following text that expresses an emotion.
+Your task is to extract the keywords that describe *why* the user is feeling this way. 
+These are trigger causes — not emotions themselves.
 
-const stopwords = new Set([
-  "i", "the", "and", "a", "to", "of", "it", "in", "is", "that", "on", "for", "with", "was", "as", "but", "are", "at", "be", "have", "this"
-]);
+Return 3 or fewer important words or phrases in JSON format (array of strings).
 
-// export function extractKeywords(text, max = 3) {
-//   const freq = {};
-//   const words = text
-//     .toLowerCase()
-//     .replace(/[^a-z\s]/g, "")
-//     .split(/\s+/)
-//     .filter(w => w && !stopwords.has(w));
+Text: "${text}"
 
-//   for (const word of words) {
-//     freq[word] = (freq[word] || 0) + 1;
-//   }
+Triggers:
+`;
 
-//   return Object.entries(freq)
-//     .sort((a, b) => b[1] - a[1])
-//     .slice(0, max)
-//     .map(([word]) => word);
-// }
+  const response = await getGeminiResponse(prompt);
 
-// Example:
-// console.log(extractKeywords("I feel like I’m drowning in assignments again."));
+  try {
+    const match = response.match(/\[.*\]/s);
+    if (match) {
+      console.log("Gemini raw response:", response);
+      return JSON.parse(match[0]);
+    }
+    throw new Error("Could not parse Gemini response");
+  } catch (err) {
+    console.error("Keyword extraction failed:", err);
+    return [];
+  }
+};
+

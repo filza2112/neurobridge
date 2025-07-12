@@ -8,11 +8,10 @@ const EmotionTrigger = require("../models/EmotionTrigger");
 
 const NEGATIVE_THRESHOLD = -0.6;
 const ALERT_TONES = ["angry", "anxious", "frustrated"];
-const triggerSessions = new Map();
 
 exports.analyzeMessage = async (req, res) => {
   try {
-    const { userId, text, email, isFollowUp, emotion, score } = req.body;
+    const { text, userId, email, isFollowUp } = req.body;
     if (!userId || !text)
       return res.status(400).json({ error: "Missing userId or text" });
 
@@ -36,49 +35,24 @@ exports.analyzeMessage = async (req, res) => {
 
     let prompt = "";
 
-    // 🔁 Handle follow-up emotion explanation
-    if (isFollowUp && emotion && Math.abs(score) > 0.7) {
-      const newKeywords = await extractKeywords(text);
+    // Handle follow-up emotion explanation
+    if (isFollowUp && Math.abs(sentiment.score) > 0.4) {
+      keywords = await extractKeywords(text);
 
-      if (triggerSessions.has(userId)) {
-        const session = triggerSessions.get(userId);
-        newKeywords.forEach((kw) => session.keywords.add(kw));
-        clearTimeout(session.timer);
+      await new ChatLog({
+        userId,
+        text,
+        sender: "user",
+        timestamp: new Date(),
+        sentiment: sentiment.sentiment,
+        score: sentiment.score,
+        tone,
+        trigger_keywords: keywords,
+        alert_triggered: false,
+        isFollowUp: true, // optional: helpful for later filtering
+      }).save();
 
-        session.timer = setTimeout(async () => {
-          await new EmotionTrigger({
-            userId,
-            emotion: session.emotion,
-            score: session.score,
-            trigger_keywords: [...session.keywords],
-            timestamp: new Date(),
-          }).save();
-          triggerSessions.delete(userId);
-        }, 60000);
-
-        triggerSessions.set(userId, session);
-      } else {
-        const keywordSet = new Set(newKeywords);
-        const timer = setTimeout(async () => {
-          await new EmotionTrigger({
-            userId,
-            emotion,
-            score,
-            trigger_keywords: [...keywordSet],
-            timestamp: new Date(),
-          }).save();
-          triggerSessions.delete(userId);
-        }, 60000);
-
-        triggerSessions.set(userId, {
-          emotion,
-          score,
-          keywords: keywordSet,
-          timer,
-        });
-      }
-
-      prompt = `The user added more context about feeling ${emotion}: "${text}". Respond with warmth and do not ask again what triggered it.\n\n${history.join(
+      prompt = `The user added more context about feeling ${tone}: "${text}". Respond with warmth and do not ask again what triggered it.\n\n${history.join(
         "\n"
       )}`;
     }
