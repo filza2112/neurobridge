@@ -31,7 +31,7 @@ router.post("/submit", async (req, res) => {
 });
 
 // GET: Get mood history
-router.get("/all", async (req, res) => {
+router.get("/all/:userId", async (req, res) => {
   try {
     const { userId } = req.query;
     if (!userId) return res.status(400).json({ error: "Missing userId" });

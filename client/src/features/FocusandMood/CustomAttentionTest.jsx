@@ -46,7 +46,7 @@ export default function CustomAttentionTest({ userId }) {
 
       {renderTest()}
       <div className="mt-6">
-        <UnifiedAttentionDashboard userId="demo-user" />
+        <UnifiedAttentionDashboard userId={userId}/>
       </div>
 
     </div>

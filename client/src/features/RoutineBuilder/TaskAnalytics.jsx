@@ -11,7 +11,7 @@ function TaskAnalytics({ completed, total }) {
   const endOfYear = new Date(`${currentYear}-12-31`);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/tasks/completion-history?userId=demo-user")
+    fetch(`http://localhost:5000/api/tasks/completion-history/userId=${userId}`)
       .then((res) => res.json())
       .then((data) => {
         const formatted = data.map((d) => ({

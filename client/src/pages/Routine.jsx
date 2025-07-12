@@ -5,9 +5,8 @@ import TaskAnalytics from "../features/RoutineBuilder/TaskAnalytics";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
-const userId = "demo-user";
 
-function RoutineBuilder() {
+function RoutineBuilder({ userId }) {
   const [tasks, setTasks] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [completionStats, setCompletionStats] = useState({ completed: 0, total: 0 });
@@ -16,7 +15,7 @@ function RoutineBuilder() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/tasks/all?userId=dev_user_123");
+        const res = await fetch(`http://localhost:5000/api/tasks/all/userId=${userId}`);
         const data = await res.json();
         if (Array.isArray(data)) setTasks(data);
         else console.error("Invalid task format:", data);
@@ -25,19 +24,10 @@ function RoutineBuilder() {
       }
     };
     fetchTasks();
-  }, []);
+  }, [userId]);
 
 
-  // Smart reordering based on mood/focus weights
-  const reorderTasks = (taskArray) => {
-    const sorted = [...taskArray].sort((a, b) => {
-      const weightA = (a.moodLevel ?? 50) * 0.6 + (a.focusLevel ?? 50) * 0.4;
-      const weightB = (b.moodLevel ?? 50) * 0.6 + (b.focusLevel ?? 50) * 0.4;
-      return weightA - weightB;
-    });
-    setTasks(sorted);
-    updateCompletionStats(sorted);
-  };
+  
 
   const updateCompletionStats = (taskList) => {
     const total = taskList.length;
@@ -48,7 +38,7 @@ function RoutineBuilder() {
   // Smart Task Generation
   const handleSmartGenerate = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/tasks/smart-generate?userId=dev_user_123");
+      const res = await fetch(`http://localhost:5000/api/tasks/smart-generate/userId=${userId}`);
 
       const data = await res.json(); // ✅ only call .json() ONCE
 

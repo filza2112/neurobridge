@@ -13,7 +13,7 @@ const FirstQuiz = () => {
   const [alreadyTaken, setAlreadyTaken] = useState(false);
 
   const userId = localStorage.getItem("userId") || "dev_user_123";
-
+  
   useEffect(() => {
     const init = async () => {
       try {

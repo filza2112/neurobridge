@@ -9,6 +9,7 @@ import {
 } from "recharts";
 
 function FocusChart() {
+  const userId = localStorage.getItem("userId");
   const [focusData, setFocusData] = useState([]);
   const [summary, setSummary] = useState({
     totalFocusedMinutes: 0,
@@ -18,7 +19,7 @@ function FocusChart() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/focus/all?userId=demo-user")
+    fetch(`http://localhost:5000/api/focus/all/userId=${userId}`)
       .then((res) => res.json())
       .then((data) => {
         const entries = data.focusLogs;
@@ -76,7 +77,7 @@ function FocusChart() {
           avgTimeBetweenBreaks: avgBreak,
         });
       });
-  }, []);
+  }, [userId]);
 
   return (
     <div className="bg-white p-4 rounded-xl shadow mt-6">
