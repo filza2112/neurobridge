@@ -87,8 +87,13 @@ function CPTGame() {
     const incorrect = total - correct;
     const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
 
+    console.log("Total:", total, "Correct:", correct, "Incorrect:", incorrect, "Accuracy:", accuracy);
+
     const summaryData = { userId, total, correct, incorrect, accuracy, endedAt: new Date() };
+    console.log("Summary data:", summaryData);
     setSummary(summaryData);
+    console.log("Summary state updated");
+    console.log("summary value is now:", summaryData);
 
     fetch("http://localhost:5000/api/focus/cpt-summary", {
       method: "POST",
@@ -98,6 +103,8 @@ function CPTGame() {
   };
 
   const handleKeyPress = useCallback((e) => {
+    console.log("KEY PRESSED:", e.key);
+
     if (e.key.toLowerCase() === "x" && running) {
       const match = sequence.slice(-2).join("") === "AX";
       const shownLetter = currentLetter;
@@ -130,7 +137,7 @@ function CPTGame() {
     <div
       ref={containerRef}
       tabIndex={0}
-      className="bg-white p-6 rounded-2xl shadow text-center"
+      className="flex flex-col justify-center items-center min-h-screen bg-background p-6 rounded-xl shadow-lg max-w-xl w-full mx-auto"
       onKeyDown={handleKeyPress}
     >
 

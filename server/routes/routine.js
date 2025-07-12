@@ -1,9 +1,21 @@
-// routes/taskRoutes.js
+
+
 const express = require("express");
 const router = express.Router();
 const Task = require("../models/Task");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const dotenv = require("dotenv");
+dotenv.config();
 
-// POST /api/tasks/add - Add personal task
+// Models
+const { MoodLog } = require("./mood");
+const { FocusLog } = require("./focus");
+const QuizData = require("../models/Quiz");
+
+// Gemini setup
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// POST /api/tasks/add
 router.post("/add", async (req, res) => {
   const { userId, title, estimatedTime = 15 } = req.body;
 
@@ -44,7 +56,7 @@ router.post("/update", async (req, res) => {
   }
 });
 
-// DELETE /api/tasks/:id - Delete a task
+// DELETE /api/tasks/:id
 router.delete("/delete/:id", async (req, res) => {
   try {
     const deleted = await Task.findByIdAndDelete(req.params.id);
@@ -56,16 +68,7 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const dotenv = require("dotenv");
-dotenv.config();
-
-const { MoodLog } = require("./mood");
-const { FocusLog } = require("./focus");
-const QuizData = require("../models/Quiz");
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
+// GET /api/tasks/smart-generate
 router.get("/smart-generate", async (req, res) => {
   const { userId } = req.query;
   if (!userId) return res.status(400).json({ error: "userId required" });
@@ -80,11 +83,11 @@ router.get("/smart-generate", async (req, res) => {
     const mood = moodLog?.mood ?? 50;
     const focus = focusLog?.visible ? 1 : 0;
 
-    if (!quiz || !quiz.answers) {
+    if (!quiz || typeof quiz.answers !== "object") {
       return res.status(400).json({ error: "Quiz data not found or invalid." });
     }
 
-    const inferredConditions = quiz.answers.inferredCondition || [];
+    const inferredConditions = quiz?.answers?.inferredCondition || [];
 
     const prompt = `
 You are a helpful mental health assistant AI.
@@ -102,26 +105,38 @@ Please generate a personalized daily routine that:
 - Includes supportive habits or mindfulness ideas.
 - Is compassionate and avoids overwhelming the user.
 
-Return your response as a JSON array:
+Return your response strictly as a JSON array like this:
 [
   { "title": "Gentle stretching exercise", "estimatedTime": 5 },
   { "title": "Deep breathing for calm", "estimatedTime": 10 }
 ]
 `;
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
+    let result, text;
+    try {
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      result = await model.generateContent(prompt);
+      text = result.response.text().trim();
+      console.log("💡 Gemini Response:\n", text);
+    } catch (err) {
+      console.error("❌ Gemini API error:", err);
+      return res.status(500).json({ error: "Failed to get response from Gemini." });
+    }
+
+    // Parse JSON safely
+    let jsonTextMatch = text.match(/```json\s*([\s\S]*?)```/i);
+    let jsonOnly = jsonTextMatch ? jsonTextMatch[1] : text;
 
     let tasks;
     try {
-      tasks = JSON.parse(text);
+      tasks = JSON.parse(jsonOnly);
       if (!Array.isArray(tasks)) throw new Error("Not an array");
     } catch (e) {
-      console.error("Gemini returned invalid JSON:", text);
+      console.error("Gemini returned invalid JSON:", jsonOnly);
       return res.status(500).json({ error: "Gemini returned invalid task format." });
     }
 
+    // Save tasks to DB
     const date = new Date().toISOString().slice(0, 10);
     const savedTasks = await Task.insertMany(
       tasks.map((t) => ({
@@ -131,17 +146,19 @@ Return your response as a JSON array:
         type: "smart",
         moodLevel: mood,
         focusLevel: focus,
-        conditions: inferredConditions
+        conditions: inferredConditions,
+        completed: false,
       }))
     );
 
     res.json(savedTasks);
   } catch (err) {
-    console.error("AI Routine Generation Error:", err);
+    console.error("🔥 AI Routine Generation Error:", err);
     res.status(500).json({ error: "Failed to generate smart routine" });
   }
-});
 
+
+});
 
 
 
@@ -195,7 +212,7 @@ router.get("/completion-history", async (req, res) => {
   res.json(result);
 });
 
-// GET /api/tasks/all - Get all tasks for a user
+// GET /api/tasks/all
 router.get("/all", async (req, res) => {
   const { userId } = req.query;
 

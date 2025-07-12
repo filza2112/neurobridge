@@ -8,6 +8,7 @@ const moodSchema = new mongoose.Schema({
   timestamp: Date,
   mood: Number,
   why: String,
+  tags: [String],
 });
 
 const MoodLog = mongoose.model("MoodLog", moodSchema);
@@ -15,9 +16,12 @@ const MoodLog = mongoose.model("MoodLog", moodSchema);
 // POST: Save mood entry
 router.post("/submit", async (req, res) => {
   try {
-    const { userId, mood, why, timestamp } = req.body;
+    const { userId, mood, emoji, why, tags, timestamp } = req.body;
 
-    const entry = new MoodLog({ userId, mood, why, timestamp });
+
+    
+    const entry = new MoodLog({ userId, mood, emoji, why, tags, timestamp });
+
     await entry.save();
 
     res.status(201).json({ message: "Mood saved" });
@@ -54,4 +58,4 @@ router.post("/api/mood/submit", async (req, res) => {
 
 
 
-module.exports = {router, MoodLog};
+module.exports = { router, MoodLog };

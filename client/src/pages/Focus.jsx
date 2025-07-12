@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import MoodSlider from "../features/FocusandMood/MoodSlider";
-import MoodDiary from "../features/FocusandMood/Diary";
+
 import CPTGame from "../features/FocusandMood/CPTGame";
 import FocusChart from "../features/FocusandMood/FocusChart";
-import MoodChart from "../features/FocusandMood/MoodChart";
+import PomodoroTimer from "../features/FocusandMood/PomodoroTimer";
+import Distraction from "../features/FocusandMood/Distraction";
+import CustomAttentionTest from "../features/FocusandMood/CustomAttentionTest";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
 
 
-const userId = "demo-user"; 
+
+const userId = "demo-user";
 
 function FocusPage() {
     const [startTime, setStartTime] = useState(Date.now());
@@ -56,38 +59,25 @@ function FocusPage() {
                 <p>Track your focus and mood to improve your mental well-being.</p>
             </div>
             {/* Focus Tracking */}
-            <section className="bg-background-alt p-6 rounded-2xl shadow-lg mb-8">
-                <h2 className="text-2xl font-semibold mb-4"> Focus Tracking</h2>
-                <CPTGame />
-                <FocusChart />
+            <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
+                <PomodoroTimer userId={userId} />
+                <Distraction userId={userId} />
             </section>
+
+            <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
+                <CPTGame />
+                <CustomAttentionTest userId={userId} />
+            </section>
+
+
 
             {/* Mood Tracking */}
-            <section className="bg-background-alt p-6 rounded-2xl shadow-lg mt-6">
-                <h2 className="text-2xl font-semibold mb-6 text-center text-primary">
-                    Mood Tracking
-                </h2>
-
-                <div className="flex flex-col md:flex-row gap-6">
-                    {/* Mood Slider (Left) */}
-                    <div className="w-full md:w-1/2">
-                        <MoodSlider />
-                    </div>
-
-                    {/* Mood Chart (Right) */}
-                    <div className="w-full md:w-1/2">
-                        <MoodChart />
-                    </div>
-                </div>
+            <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
+                <MoodSlider userId={userId} />
             </section>
 
-            {/* Mood Diary */}
-            <section className="bg-background-alt p-6 rounded-2xl shadow-lg mt-6">
-                <h2 className="text-2xl font-semibold mb-4">Mood Diary</h2>
-                <MoodDiary />
-            </section>
-            <Footer/>
-            
+            <Footer />
+
         </div >
         </>
     );

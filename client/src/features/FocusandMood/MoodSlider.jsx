@@ -1,23 +1,50 @@
 import React, { useState } from "react";
 
 const emojis = ["😡", "😟", "😐", "🙂", "😄"];
+const moodTags = [
+  "Exam stress",
+  "Sleepy",
+  "Social win",
+  "Family fight",
+  "Productive day",
+  "Anxious",
+  "Lonely",
+  "Motivated",
+  "Tired",
+  "Happy moment",
+  "Overwhelmed",
+  "Focused",
+  "Friend drama",
+  "Self-care day",
+  "Under pressure",
+  "Feeling grateful",
+  "Burned out",
+  "Inspired",
+  "Bad sleep",
+  "Accomplished"
+];
+
 
 function MoodSlider() {
   const [moodIndex, setMoodIndex] = useState(2); // Default to "Neutral"
   const [why, setWhy] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [tags, setTags] = useState([]);
+  
 
   const submitMood = async () => {
     setLoading(true);
 
     const moodEntry = {
-      userId: "demo-user", // Replace with dynamic user ID if available
+      userId: "demo-user",
       timestamp: new Date().toISOString(),
-      mood: moodIndex * 25, // Mood on scale 0–100
+      mood: moodIndex * 25,
       emoji: emojis[moodIndex],
       why,
+      tags,
     };
+
 
     try {
       const res = await fetch("http://localhost:5000/api/mood/submit", {
@@ -36,6 +63,8 @@ function MoodSlider() {
     } finally {
       setLoading(false);
     }
+
+
   };
 
   return (
@@ -61,16 +90,39 @@ function MoodSlider() {
         {emojis.map((emoji, index) => (
           <span
             key={index}
-            className={`transition-transform duration-200 ${
-              index === moodIndex ? "scale-125" : "opacity-40"
-            }`}
+            className={`transition-transform duration-200 ${index === moodIndex ? "scale-125" : "opacity-40"
+              }`}
           >
             {emoji}
           </span>
         ))}
       </div>
+      <div className="mt-4">
+        <p className="text-sm mb-2 font-semibold text-primary">Tags:</p>
+        <div className="flex flex-wrap gap-2">
+          {moodTags.map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              className={`px-3 py-1 rounded-full border ${tags.includes(tag)
+                ? "bg-primary text-white border-primary"
+                : "bg-white text-primary border-primary"
+                }`}
+              onClick={() => {
+                setTags((prev) =>
+                  prev.includes(tag)
+                    ? prev.filter((t) => t !== tag)
+                    : [...prev, tag]
+                );
+              }}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      </div>
 
-      
+
 
       {/* Reason text area */}
       <textarea
