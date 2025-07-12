@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import Logo from '../assets/images/logo.png';
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { token, logout } = useAuth();
 
   const handleLogout = () => {
-    logout();
+    logout(navigate);
     setIsMobileMenuOpen(false);
   };
 

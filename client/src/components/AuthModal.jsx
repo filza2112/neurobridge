@@ -22,7 +22,7 @@ const AuthModal = ({ isOpen, onClose, isSignupMode, setSignupMode }) => {
       const response = await api.post(url, formData);
 
       if (response.status === 200 || response.status === 201) {
-        
+        localStorage.setItem("token", response.data.token);
         onClose();
         navigate('/homepage');
       } else {
