@@ -12,7 +12,7 @@ const FirstQuiz = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [alreadyTaken, setAlreadyTaken] = useState(false);
 
-  const userId = localStorage.getItem("userId") || "dev_user_123";
+  const userId = localStorage.getItem("userId");
   
   useEffect(() => {
     const init = async () => {
@@ -33,7 +33,7 @@ const FirstQuiz = () => {
       }
     };
     init();
-  }, []);
+  }, [userId]);
 
   const handleChange = (questionId, index) => {
     setResponses((prev) => ({ ...prev, [questionId]: index }));

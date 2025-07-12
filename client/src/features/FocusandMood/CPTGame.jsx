@@ -130,7 +130,7 @@ function CPTGame() {
         body: JSON.stringify(logEntry),
       });
     }
-  }, [running, sequence, currentLetter]);
+  }, [running, sequence, currentLetter, userId]);
 
 
   return (
