@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/login';
-import DashBoard from './pages/homepage';
-import Homepage from './pages/loggedin';
+import DashBoard from './pages/dashboard';
+import Homepage from './pages/homepage';
 import RoutineBuilderPage from './pages/Routine';
 import FocusMoodTrackerPage from './pages/Focus';
 import QuizPage from './pages/QuizPage';
