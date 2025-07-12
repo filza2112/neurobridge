@@ -4,17 +4,22 @@ import img2 from '../assets/smiski/smiski2.png';
 import img3 from '../assets/smiski/smiski3.png';
 import img4 from '../assets/smiski/smiski4.png';
 
-
-const smiskiImages = [
-  { id: 1, src: {img1}, isFlipped: false, isMatched: false },
-  { id: 2, src: {img2}, isFlipped: false, isMatched: false },
-  { id: 3, src: {img3}, isFlipped: false, isMatched: false },
-  { id: 4, src: {img4}, isFlipped: false, isMatched: false },
-  { id: 5, src: {img1}, isFlipped: false, isMatched: false },
-  { id: 6, src: {img2}, isFlipped: false, isMatched: false },
-  { id: 7, src: {img3}, isFlipped: false, isMatched: false },
-  { id: 8, src: {img4}, isFlipped: false, isMatched: false },
+const initialImages = [
+  { id: 1, src: img1 },
+  { id: 2, src: img2 },
+  { id: 3, src: img3 },
+  { id: 4, src: img4 },
+  { id: 5, src: img1 },
+  { id: 6, src: img2 },
+  { id: 7, src: img3 },
+  { id: 8, src: img4 },
 ];
+
+const shuffleArray = (array) => {
+  return [...array]
+    .map((card) => ({ ...card, isFlipped: false, isMatched: false }))
+    .sort(() => Math.random() - 0.5);
+};
 
 const SmiskiMemoryMatch = () => {
   const [cards, setCards] = useState([]);
@@ -22,16 +27,18 @@ const SmiskiMemoryMatch = () => {
   const [matchedPairs, setMatchedPairs] = useState(0);
 
   useEffect(() => {
-    setCards(shuffleArray([...smiskiImages]));
+    setCards(shuffleArray(initialImages));
   }, []);
 
-  const shuffleArray = (array) => {
-    return array.sort(() => Math.random() - 0.5);
-  };
+  
 
   const handleCardClick = (index) => {
     const newCards = [...cards];
-    if (flippedCards.length < 2 && !newCards[index].isFlipped && !newCards[index].isMatched) {
+    if (
+      flippedCards.length < 2 &&
+      !newCards[index].isFlipped &&
+      !newCards[index].isMatched
+    ) {
       newCards[index].isFlipped = true;
       setFlippedCards([...flippedCards, index]);
       setCards(newCards);
@@ -41,11 +48,14 @@ const SmiskiMemoryMatch = () => {
   useEffect(() => {
     if (flippedCards.length === 2) {
       const [firstIndex, secondIndex] = flippedCards;
-      if (cards[firstIndex].src === cards[secondIndex].src) {
+      const firstCard = cards[firstIndex];
+      const secondCard = cards[secondIndex];
+
+      if (firstCard.src === secondCard.src) {
         const newCards = [...cards];
         newCards[firstIndex].isMatched = true;
         newCards[secondIndex].isMatched = true;
-        setMatchedPairs(matchedPairs + 1);
+        setMatchedPairs((prev) => prev + 1);
         setFlippedCards([]);
       } else {
         setTimeout(() => {
@@ -57,49 +67,47 @@ const SmiskiMemoryMatch = () => {
         }, 1000);
       }
     }
-  }, [flippedCards, cards, matchedPairs]);
+  }, [flippedCards, cards]);
 
   const restartGame = () => {
-    const resetCards = smiskiImages.map(card => ({ ...card, isFlipped: false, isMatched: false }));
-    setCards(shuffleArray([...resetCards]));
+    setCards(shuffleArray(initialImages));
     setFlippedCards([]);
     setMatchedPairs(0);
   };
 
   return (
-    <div className="min-h-screen bg-black text-center font-[Tiny_5] p-5 text-white">
+    <div className="min-h-screen bg-black text-white text-center font-[Tiny_5] p-5">
       <h2 className="text-2xl mb-5">Smiski Memory Match</h2>
-      
+
       <div className="flex flex-wrap justify-center gap-5 mb-5">
         {cards.map((card, index) => (
           <div
             key={index}
             onClick={() => handleCardClick(index)}
-            className={`w-48 h-48 cursor-pointer border-2 border-[#8ca1a5] rounded-lg shadow-md transition-transform duration-300 perspective relative ${
-              card.isFlipped || card.isMatched ? 'scale-105' : ''
-            }`}
+            className="w-40 h-40 cursor-pointer perspective"
           >
-            <div className={`relative w-full h-full transition-transform duration-500 transform-style-preserve-3d ${card.isFlipped ? 'rotate-y-180' : ''}`}>
-              {/* Front */}
-              <div className="absolute w-full h-full rounded-lg backface-hidden bg-[#a34141] flex items-center justify-center shadow-md">
-                {(card.isFlipped || card.isMatched) && (
-                  <img
-                    src={card.src}
-                    alt="Smiski"
-                    className="w-[90%] h-[90%] object-cover rounded-md"
-                  />
-                )}
+            <div
+              className={`card-inner ${card.isFlipped || card.isMatched ? 'flipped' : ''}`}
+            >
+              {/* Front side (face down) */}
+              <div className="card-face card-front">
+                🎴
               </div>
-              {/* Back */}
-              <div className="absolute w-full h-full rounded-lg backface-hidden bg-[#ececf1] text-black text-2xl flex items-center justify-center transform rotate-y-180">
-                {!card.isFlipped && !card.isMatched && '🎴'}
+
+              {/* Back side (face up) */}
+              <div className="card-face card-back">
+                <img
+                  src={card.src}
+                  alt="Smiski"
+                  className="w-[90%] h-[90%] object-contain rounded-md"
+                />
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {matchedPairs === smiskiImages.length / 2 && (
+      {matchedPairs === initialImages.length / 2 && (
         <div className="mt-5">
           <h3 className="text-lg mb-2">🎉 Congratulations! You matched all pairs! 🎉</h3>
           <button

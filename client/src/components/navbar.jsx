@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import Logo from '../assets/images/logo.png';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,9 +18,12 @@ const Navbar = () => {
         <div className="w-full md:w-[1300px] h-[80px] px-4 md:px-0 mx-auto flex justify-between items-center">
           {/* Logo */}
           <a href="/homepage" className="cursor-pointer py-7 pr-7">
-           <span className="text-transparent bg-gradient-to-r from-green-400 via-emerald-500 to-teal-400 bg-clip-text text-xl md:text-3xl font-extrabold tracking-wide drop-shadow-lg">
-  NeuroBridge
-</span>
+          <div className='flex space-x-1'>
+          <img src={Logo} alt="" className='h-[50px] w-[50px] mt-[-10px]'/>
+          <span className="text-transparent bg-gradient-to-r from-white via-accent to-text-secondary bg-clip-text text-xl md:text-3xl font-bold tracking-wide drop-shadow-md">
+          Neuro+ Bridge
+          </span>
+        </div>
 
           </a>
 
@@ -66,11 +70,18 @@ const Navbar = () => {
           {(
             <div className="hidden md:flex space-x-6 items-center">
               <Link
+                to='/dashbaord'
+                className="px-5 my-5 py-3 font-mullish text-white border border-accent rounded-sm text-sm font-bold whitespace-nowrap hover:text-primary hover:bg-white"
+              >
+                Dashboard
+              </Link>
+              <Link
                 to='/'
                 className="px-5 my-5 py-3 font-mullish text-white border border-accent rounded-sm text-sm font-bold whitespace-nowrap hover:text-primary hover:bg-white"
               >
                 Log Out
               </Link>
+          
             </div>
           )}
         </div>
