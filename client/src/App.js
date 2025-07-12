@@ -43,5 +43,3 @@ export default function App() {
   );
 }
 
-
-import SmiskiMemoryMatch from '../components/MemoryGame/Memorylogic';
