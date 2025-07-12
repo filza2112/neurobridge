@@ -14,7 +14,7 @@ export default function DistractionLogger({ userId }) {
 
   const handleLog = async (type) => {
     try {
-      await fetch("http://localhost:5000/api/distractions/log", {
+      await fetch("http://localhost:5000/api/distraction/log", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, type }),

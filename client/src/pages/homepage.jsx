@@ -1,9 +1,8 @@
-import React from 'react';
-import Navbar from '../components/navbar';
-import Footer from '../components/footer';
-import Features from '../components/features';
-import MoodChart from '../features/FocusandMood/MoodChart';
-import FocusChart from '../features/FocusandMood/FocusChart';
+import React from "react";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
+import MoodChart from "../features/FocusandMood/MoodChart";
+import FocusChart from "../features/FocusandMood/FocusChart";
 
 const Dashboard = () => {
   return (
@@ -11,26 +10,35 @@ const Dashboard = () => {
       <Navbar />
 
       <main className="flex-grow px-4 py-6">
-        <div className="flex flex-col-reverse md:flex-row gap-6">
+        <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+          Your Dashboard
+        </h1>
 
-          {/* Features section */}
-          <div className="w-full md:w-1/3 bg-white p-4 rounded-2xl shadow-md align-center">
-          <h2 className="text-center font-bold text-text-dark font-mullish text-xl">Features</h2>
-           <Features />
-          </div>
-          
-          {/* Charts section */}
-          <div className="w-full md:w-2/3 flex flex-col gap-4">
-            <div className="bg-white p-4 h-64 md:h-72">
+        {/* Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Combined Focus & Mood Section */}
+          <DashboardCard title="Focus & Mood">
+            <div className="space-y-4">
               <MoodChart />
-            </div>
-            <div className="bg-white p-4 h-64 md:h-72">
               <FocusChart />
             </div>
-          </div>
+          </DashboardCard>
 
-        
-          
+          {/* Routine Section */}
+          <DashboardCard title="Routine">
+            <p className="text-gray-600">
+              Track your daily habits and routines here.
+            </p>
+            {/* TODO: Add Routine component */}
+          </DashboardCard>
+
+          {/* Quiz Section */}
+          <DashboardCard title="Quiz">
+            <p className="text-gray-600">
+              Take your quiz or view weekly results.
+            </p>
+            {/* TODO: Add Quiz chart / summary / CTA */}
+          </DashboardCard>
         </div>
       </main>
 
@@ -38,5 +46,12 @@ const Dashboard = () => {
     </div>
   );
 };
+
+const DashboardCard = ({ title, children }) => (
+  <div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300">
+    <h2 className="text-xl font-semibold text-gray-800 mb-4">{title}</h2>
+    {children}
+  </div>
+);
 
 export default Dashboard;
