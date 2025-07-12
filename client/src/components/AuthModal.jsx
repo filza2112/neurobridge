@@ -22,6 +22,11 @@ const AuthModal = ({ isOpen, onClose, isSignupMode, setSignupMode }) => {
       const response = await api.post(url, formData);
 
       if (response.status === 200 || response.status === 201) {
+        const { userId, name } = response.data;
+
+        // ✅ Save to localStorage for personalization
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("userName", name);
         // Success: redirect to homepage
         onClose();
         navigate('/homepage');
