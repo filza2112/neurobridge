@@ -46,7 +46,7 @@ export default function CustomAttentionTest({ userId }) {
 
       {renderTest()}
       <div className="mt-6">
-        <UnifiedAttentionDashboard userId={localStorage.getItem("userId") || "dev_user_123"} />
+        <UnifiedAttentionDashboard userId={userId}/>
       </div>
 
     </div>

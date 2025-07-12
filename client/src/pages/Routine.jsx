@@ -6,7 +6,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
 const userId = localStorage.getItem("userId") || "dev_user_123";
-function RoutineBuilder() {
+function RoutineBuilder({ userId }) {
   const [tasks, setTasks] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [completionStats, setCompletionStats] = useState({ completed: 0, total: 0 });
@@ -24,19 +24,10 @@ function RoutineBuilder() {
       }
     };
     fetchTasks();
-  }, []);
+  }, [userId]);
 
 
-  // Smart reordering based on mood/focus weights
-  const reorderTasks = (taskArray) => {
-    const sorted = [...taskArray].sort((a, b) => {
-      const weightA = (a.moodLevel ?? 50) * 0.6 + (a.focusLevel ?? 50) * 0.4;
-      const weightB = (b.moodLevel ?? 50) * 0.6 + (b.focusLevel ?? 50) * 0.4;
-      return weightA - weightB;
-    });
-    setTasks(sorted);
-    updateCompletionStats(sorted);
-  };
+  
 
   const updateCompletionStats = (taskList) => {
     const total = taskList.length;

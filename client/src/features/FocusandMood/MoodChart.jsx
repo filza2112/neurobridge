@@ -10,6 +10,7 @@ import {
 const userId=localStorage.getItem("userId") || "dev_user_123"
 function MoodChart() {
   const [moodData, setMoodData] = useState([]);
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/mood/all/userId=${userId}`)
@@ -28,7 +29,7 @@ function MoodChart() {
       .catch((err) => {
         console.error("Failed to load mood data", err);
       });
-  }, []);
+  }, [userId]);
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow">

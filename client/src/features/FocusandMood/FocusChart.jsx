@@ -9,6 +9,7 @@ import {
 } from "recharts";
 const userId=localStorage.getItem("userId") || "dev_user_123"
 function FocusChart() {
+  const userId = localStorage.getItem("userId");
   const [focusData, setFocusData] = useState([]);
   const [summary, setSummary] = useState({
     totalFocusedMinutes: 0,
@@ -76,7 +77,7 @@ function FocusChart() {
           avgTimeBetweenBreaks: avgBreak,
         });
       });
-  }, []);
+  }, [userId]);
 
   return (
     <div className="bg-white p-4 rounded-xl shadow mt-6">

@@ -1,8 +1,7 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MoodSlider from "../features/FocusandMood/MoodSlider";
 
 import CPTGame from "../features/FocusandMood/CPTGame";
-import FocusChart from "../features/FocusandMood/FocusChart";
 import PomodoroTimer from "../features/FocusandMood/PomodoroTimer";
 import Distraction from "../features/FocusandMood/Distraction";
 import CustomAttentionTest from "../features/FocusandMood/CustomAttentionTest";
@@ -12,8 +11,8 @@ import Footer from "../components/footer";
 
 const userId = localStorage.getItem("userId") || "dev_user_123";
 function FocusPage() {
-    const [startTime, setStartTime] = useState(Date.now());
-
+    const [startTime] = useState(Date.now());
+    const userId = localStorage.getItem("userId");
     // Tab visibility change tracking
     useEffect(() => {
         const handleVisibility = () => {
@@ -29,7 +28,7 @@ function FocusPage() {
         };
         document.addEventListener("visibilitychange", handleVisibility);
         return () => document.removeEventListener("visibilitychange", handleVisibility);
-    }, []);
+    }, [userId]);
 
     // Session duration logging
     useEffect(() => {
@@ -45,33 +44,33 @@ function FocusPage() {
         };
         window.addEventListener("beforeunload", handleBeforeUnload);
         return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-    }, [startTime]);
+    }, [startTime, userId]);
 
     return (
       <>
         <Navbar />
         <div className="font-mullish bg-background min-h-screen text-primary p-6">
-          <h1 className="text-3xl font-bold text-center mb-2 mt-4">
-            Focus & Mood Tracker
-          </h1>
-          <div className="text-center mb-4 text-text-secondary">
-            <p>Track your focus and mood to improve your mental well-being.</p>
-          </div>
-          {/* Focus Tracking */}
-          <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
-            <PomodoroTimer userId={userId} />
-            <Distraction userId={userId} />
-          </section>
+            <h1 className="text-3xl font-bold text-center mb-2 mt-4">Focus & Mood Tracker</h1>
+            <div className="text-center mb-4 text-text-secondary">
+                <p>Track your focus and mood to improve your mental well-being.</p>
+            </div>
+            {/* Focus Tracking */}
+            <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
+                <PomodoroTimer/>
+                <Distraction />
+            </section>
 
-          <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
-            <CPTGame />
-            <CustomAttentionTest userId={userId} />
-          </section>
+            <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
+                <CPTGame />
+                <CustomAttentionTest/>
+            </section>
 
-          {/* Mood Tracking */}
-          <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
-            <MoodSlider userId={userId} />
-          </section>
+
+
+            {/* Mood Tracking */}
+            <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
+                <MoodSlider />
+            </section>
 
           <Footer />
         </div>
