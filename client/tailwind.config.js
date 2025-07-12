@@ -16,6 +16,7 @@ module.exports = {
       },
       fontFamily: {
         mullish: ["Mulish", "sans-serif"],
+        'Tiny_5': ['"Tiny 5"', 'monospace'],
       },
     },
   },
