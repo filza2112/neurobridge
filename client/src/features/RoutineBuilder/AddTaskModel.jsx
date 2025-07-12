@@ -4,13 +4,14 @@ function AddTaskModal({ onClose, setTasks }) {
   const [title, setTitle] = useState("");
   const [time, setTime] = useState(30);
   const [loading, setLoading] = useState(false);
+  const userId = localStorage.getItem("userId");
 
   const addTask = async () => {
     if (!title.trim()) return;
     setLoading(true);
 
     const task = {
-      userId: userId,
+      userId,
       title,
       estimatedTime: time,
       type: "personal",

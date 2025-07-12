@@ -4,12 +4,14 @@ import "react-calendar-heatmap/dist/styles.css";
 
 const userId = localStorage.getItem("userId") || "dev_user_123";
 function TaskAnalytics({ completed, total }) {
+  
   const [completionData, setCompletionData] = useState([]);
   const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
 
   const currentYear = new Date().getFullYear();
   const startOfYear = new Date(`${currentYear}-01-01`);
   const endOfYear = new Date(`${currentYear}-12-31`);
+  const [userId] = useState(localStorage.getItem("userId"));
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/tasks/completion-history/userId=${userId}`)
@@ -21,7 +23,7 @@ function TaskAnalytics({ completed, total }) {
         }));
         setCompletionData(formatted);
       });
-  }, []);
+  }, [userId]);
 
   const getMessage = () => {
     if (percent === 100) return "🎯 Perfect streak! Keep it up!";
