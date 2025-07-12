@@ -6,9 +6,10 @@ const features = [
     id: "routine-builder",
     icon: "✨",
     title: "Routine Builder",
-    description: "AI-generated, adaptive task scheduler for daily structure and therapy routines",
+    description:
+      "AI-generated, adaptive task scheduler for daily structure and therapy routines",
     tags: ["ADHD", "Autism", "OCD"],
-    path: "/features/routine-builder", 
+    path: "/features/routine-builder",
   },
   {
     id: "focus-mood-tracker",
@@ -16,7 +17,7 @@ const features = [
     title: "Focus & Mood Tracker",
     description: "Passive tracking using phone usage, typing patterns",
     tags: ["ADHD", "Autism"],
-    path: "/features/focus-mood-tracker", 
+    path: "/features/focus-mood-tracker",
   },
   {
     id: "quiz",
@@ -30,9 +31,19 @@ const features = [
     id: "neuroplay-zone",
     icon: "🎮",
     title: "NeuroPlay Zone",
-    description: "Gamified brain training zone with adaptive levels for attention, inhibition control, and social skills",
+    description:
+      "Gamified brain training zone with adaptive levels for attention, inhibition control, and social skills",
     tags: ["ADHD", "Autism", "OCD"],
     path: "/features/neuroplay-zone",
+  },
+  {
+    id: "Chat",
+    icon: "🎮",
+    title: "AI-Therapist",
+    description:
+      "Gamified brain training zone with adaptive levels for attention, inhibition control, and social skills",
+    tags: ["ADHD", "Autism", "OCD"],
+    path: "/features/chat",
   },
 ];
 

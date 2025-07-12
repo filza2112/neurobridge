@@ -6,10 +6,11 @@ const QuizPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const goHome = () => navigate("/");
-  const goDashboard = () => navigate("/dashboard");
+  const isOnMainQuizPage = location.pathname === "/features/quiz";
 
-  const isSubRoute = location.pathname !== "/features/quiz";
+  const goHome = () =>
+    isOnMainQuizPage ? navigate("/") : navigate("/features/quiz");
+  const goDashboard = () => navigate("/dashboard");
 
   return (
     <>
@@ -31,8 +32,7 @@ const QuizPage = () => {
       {/* Render nested quiz component if routed */}
       <Outlet />
 
-      {/* Render main menu if on /features/quiz */}
-      {!isSubRoute && (
+      {isOnMainQuizPage && (
         <div className="flex flex-col items-center gap-6">
           <QuizCard
             title="🧠 First-Time Quiz"
