@@ -20,7 +20,7 @@ const Navbar = () => {
         <div className='flex space-x-1'>
           <img src={Logo} alt="" className='h-[50px] w-[50px] mt-[-10px]'/>
 <span className="text-transparent bg-gradient-to-r from-white via-accent to-text-secondary bg-clip-text text-xl md:text-3xl font-bold tracking-wide drop-shadow-md">
-  Neuro+ Bridge
+  NeuroBridge
 </span>
 </div>
 

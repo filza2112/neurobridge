@@ -18,7 +18,7 @@ const Navbar = () => {
           {/* Logo */}
           <a href="/homepage" className="cursor-pointer py-7 pr-7">
            <span className="text-transparent bg-gradient-to-r from-green-400 via-emerald-500 to-teal-400 bg-clip-text text-xl md:text-3xl font-extrabold tracking-wide drop-shadow-lg">
-  Neuro+ Bridge
+  NeuroBridge
 </span>
 
           </a>
