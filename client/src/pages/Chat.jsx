@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import VoiceInput from "../features/chat/VoiceInput";
+import VoiceInput from "../features/Chat/VoiceInput";
 
 export default function EmotionChat() {
   const [messages, setMessages] = useState([]);

@@ -1,8 +1,7 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MoodSlider from "../features/FocusandMood/MoodSlider";
 
 import CPTGame from "../features/FocusandMood/CPTGame";
-import FocusChart from "../features/FocusandMood/FocusChart";
 import PomodoroTimer from "../features/FocusandMood/PomodoroTimer";
 import Distraction from "../features/FocusandMood/Distraction";
 import CustomAttentionTest from "../features/FocusandMood/CustomAttentionTest";
@@ -12,8 +11,8 @@ import Footer from "../components/footer";
 
 
 function FocusPage() {
-    const [startTime, setStartTime] = useState(Date.now());
-
+    const [startTime] = useState(Date.now());
+    const userId = localStorage.getItem("userId");
     // Tab visibility change tracking
     useEffect(() => {
         const handleVisibility = () => {
@@ -29,7 +28,7 @@ function FocusPage() {
         };
         document.addEventListener("visibilitychange", handleVisibility);
         return () => document.removeEventListener("visibilitychange", handleVisibility);
-    }, []);
+    }, [userId]);
 
     // Session duration logging
     useEffect(() => {
@@ -45,7 +44,7 @@ function FocusPage() {
         };
         window.addEventListener("beforeunload", handleBeforeUnload);
         return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-    }, [startTime]);
+    }, [startTime, userId]);
 
     return (
         <>
@@ -57,20 +56,20 @@ function FocusPage() {
             </div>
             {/* Focus Tracking */}
             <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
-                <PomodoroTimer/>
-                <Distraction />
+                <PomodoroTimer userId={userId}/>
+                <Distraction userId={userId} />
             </section>
 
             <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
-                <CPTGame />
-                <CustomAttentionTest/>
+                <CPTGame userId={userId}/>
+                <CustomAttentionTest userId={userId}/>
             </section>
 
 
 
             {/* Mood Tracking */}
             <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
-                <MoodSlider />
+                <MoodSlider userId={userId}/>
             </section>
 
             <Footer />
