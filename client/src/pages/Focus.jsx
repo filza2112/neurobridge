@@ -13,6 +13,7 @@ const userId = localStorage.getItem("userId") || "dev_user_123";
 function FocusPage() {
     const [startTime] = useState(Date.now());
     const userId = localStorage.getItem("userId");
+    console.log("FocusPage userId:", userId);
     // Tab visibility change tracking
     useEffect(() => {
         const handleVisibility = () => {
@@ -62,7 +63,7 @@ function FocusPage() {
 
             <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
                 <CPTGame />
-                <CustomAttentionTest/>
+                <CustomAttentionTest userId={localStorage.getItem("userId")}/>
             </section>
 
 

@@ -45,7 +45,7 @@ export default function DigitSpanTest({ userId, difficulty }) {
     setMessage(isCorrect ? "✅ Correct!" : "❌ Incorrect");
 
     // Save to MongoDB
-    fetch("http://localhost:5000/api/attention/digit-span", {
+    fetch(`http://localhost:5000/api/attention/digit-span/${userId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

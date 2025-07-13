@@ -69,7 +69,10 @@ router.delete("/delete/:id", async (req, res) => {
 });
 
 // GET /api/tasks/smart-generate
-router.get("/all/:userId", async (req, res) => {
+
+
+router.get("/smart-generate/:userId", async (req, res) => {
+
   const { userId } = req.params;
   if (!userId) return res.status(400).json({ error: "userId required" });
 
@@ -83,11 +86,25 @@ router.get("/all/:userId", async (req, res) => {
     const mood = moodLog?.mood ?? 50;
     const focus = focusLog?.visible ? 1 : 0;
 
-    if (!quiz || typeof quiz.answers !== "object") {
-      return res.status(400).json({ error: "Quiz data not found or invalid." });
+    if (!quiz) {
+      return res.status(400).json({ error: "Quiz data not found." });
     }
 
-    const inferredConditions = quiz?.answers?.inferredCondition || [];
+    let inferredConditions = [];
+
+    if (Array.isArray(quiz.answers)) {
+      // Fallback to primaryCondition or inferredScores
+      if (quiz.primaryCondition) {
+        inferredConditions = [quiz.primaryCondition];
+      } else if (quiz.inferredScores) {
+        inferredConditions = Object.entries(quiz.inferredScores)
+          .filter(([_, score]) => score > 0)
+          .map(([cond]) => cond);
+      }
+    } else if (typeof quiz.answers === "object") {
+      inferredConditions = quiz.answers.inferredCondition || [];
+    }
+
 
     const prompt = `
 You are a helpful mental health assistant AI.
@@ -220,7 +237,8 @@ router.get("/completion-history", async (req, res) => {
 
 // GET /api/tasks/all
 router.get("/all/:userId", async (req, res) => {
-  const { userId } = req.query;
+
+  const { userId } = req.params;
 
   if (!userId) {
     return res.status(400).json({ error: "userId is required in query." });

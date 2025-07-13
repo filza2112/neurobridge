@@ -38,7 +38,7 @@ function RoutineBuilder({ userId }) {
   // Smart Task Generation
   const handleSmartGenerate = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/smart-generate/userId=${userId}`);
+      const res = await fetch(`http://localhost:5000/api/tasks/smart-generate/${userId}`);
 
       const data = await res.json(); // ✅ only call .json() ONCE
 
