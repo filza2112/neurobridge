@@ -7,6 +7,7 @@ import Footer from '../components/footer';
 
 const LoginPage = () => {
   const [isSignupMode, setSignupMode] = useState(false);
+  
 
   return (
     <>

@@ -4,7 +4,11 @@ import Footer from "../components/footer";
 import MoodChart from "../features/FocusandMood/MoodChart";
 import FocusChart from "../features/FocusandMood/FocusChart";
 import WeeklyProgressChart from "../components/WeeklyProgressChart";
+
 import TopTriggersCard from "../components/triggers"; 
+
+import TaskAnalytics from "../features/RoutineBuilder/TaskAnalytics";
+
 
 const userId = localStorage.getItem("userId");
 
@@ -32,6 +36,7 @@ const Dashboard = () => {
               Track your daily habits and routines here.
             </p>
             {/* TODO: Add Routine component */}
+            <TaskAnalytics userId={userId} />
           </DashboardCard>
 
           {/* Quiz Section */}

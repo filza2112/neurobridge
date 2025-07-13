@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+const api = process.env.REACT_APP_API_URL;
 
 function TaskList({ tasks = [], setTasks }) {
   const [editIndex, setEditIndex] = useState(null);
@@ -10,7 +11,7 @@ function TaskList({ tasks = [], setTasks }) {
     updated[index].completed = !updated[index].completed;
     setTasks(updated);
 
-    fetch("http://localhost:5000/api/tasks/update", {
+    fetch(`${api}/api/tasks/update`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ taskId: updated[index]._id, updates: { completed: updated[index].completed } }),
@@ -28,7 +29,7 @@ function TaskList({ tasks = [], setTasks }) {
     setTasks(updated);
     setEditIndex(null);
 
-    fetch("http://localhost:5000/api/tasks/update", {
+    fetch(`${api}/api/tasks/update`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ taskId: updated[index]._id, updates: { title: editText } }),
@@ -46,7 +47,7 @@ function TaskList({ tasks = [], setTasks }) {
 
   const handleDelete = async (taskId) => {
     try {
-      await fetch(`http://localhost:5000/api/tasks/delete/${taskId}`, {
+      await fetch(`${api}/api/tasks/delete/${taskId}`, {
         method: "DELETE",
       });
 
