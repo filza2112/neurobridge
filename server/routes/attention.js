@@ -166,30 +166,28 @@ const SimonResult = require("../models/SimonResult");
 router.post("/stroop/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    const {
-      word,
-      color,
-      selectedColor,
-      correct,
-      timeTaken,
-      difficulty,
-      timestamp,
-    } = req.body;
+    const { attempts = [], difficulty = "medium" } = req.body;
 
-    const result = new StroopResult({
+    if (!Array.isArray(attempts) || attempts.length !== 10) {
+      return res.status(400).json({ error: "Expected 10 attempts" });
+    }
+
+    const total = attempts.length;
+    const correctCount = attempts.filter((a) => a.correct).length;
+    const avgTime =
+      attempts.reduce((sum, a) => sum + (a.timeTaken || 0), 0) / total;
+    const accuracy = (correctCount / total) * 100;
+
+    const summary = new StroopResult({
       userId,
-      word,
-      color,
-      selectedColor,
-      correct,
-      timeTaken,
+      accuracy,
+      avgTime,
       difficulty,
-      timestamp,
-      accuracy: correct ? 100 : 0,
+      timestamp: new Date(),
     });
 
-    await result.save();
-    res.status(201).json(result);
+    await summary.save();
+    res.status(201).json(summary);
   } catch (err) {
     console.error("Error saving stroop result", err);
     res.status(500).json({ error: "Internal server error" });
@@ -212,8 +210,6 @@ router.post("/digit-span/:userId", async (req, res) => {
 
     const result = new DigitSpanResult({
       userId,
-      sequence,
-      userInput,
       correct,
       level,
       timeTaken,
@@ -322,7 +318,7 @@ router.get("/summary/:userId", async (req, res) => {
     },
     stroop: {
       accuracy: calcAvg(stroop, "accuracy"),
-      avgTime: calcAvg(stroop, "timeTaken"),
+      avgTime: calcAvg(stroop, "avgTime"),
       lastPlayed: stroop[0]?.timestamp || null,
     },
   });
