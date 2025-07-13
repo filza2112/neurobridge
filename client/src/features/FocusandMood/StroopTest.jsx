@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+const api = process.env.REACT_APP_API_URL;
 
 const colors = ["red", "green", "blue", "white"];
 
@@ -44,7 +45,7 @@ export default function StroopTest({ userId, difficulty }) {
 
     if (newAttempts.length === 10) {
       // Send 10 attempts as a batch
-      fetch(`http://localhost:5000/api/attention/stroop/${userId}`, {
+      fetch(`${api}/api/attention/stroop/${userId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, attempts: newAttempts })

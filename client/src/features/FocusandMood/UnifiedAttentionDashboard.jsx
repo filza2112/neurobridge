@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+const api = process.env.REACT_APP_API_URL;
 
 
 
@@ -10,7 +11,7 @@ export default function UnifiedAttentionDashboard({userId}) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/attention/summary/${userId}`);
+        const res = await fetch(`${api}/api/attention/summary/${userId}`);
         const summary = await res.json();
         console.log("📊 Summary response:", summary);
 

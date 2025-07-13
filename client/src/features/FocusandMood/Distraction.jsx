@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaMobileAlt, FaVolumeUp, FaBrain, FaUserFriends, FaBed } from "react-icons/fa";
+const api = process.env.REACT_APP_API_URL;
 
 const DISTRACTIONS = [
   { type: "Phone", icon: <FaMobileAlt />, color: "bg-red-200" },
@@ -24,7 +25,7 @@ export default function DistractionLogger() {
       return;
     }
 
-    fetch("http://localhost:5000/api/distraction/log", {
+    fetch(`${api}/api/distraction/log`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId, type })

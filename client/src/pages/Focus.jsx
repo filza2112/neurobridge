@@ -7,9 +7,9 @@ import Distraction from "../features/FocusandMood/Distraction";
 import CustomAttentionTest from "../features/FocusandMood/CustomAttentionTest";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
+const api = process.env.REACT_APP_API_URL;
 
 
-const userId = localStorage.getItem("userId") || "dev_user_123";
 function FocusPage() {
     const [startTime] = useState(Date.now());
     const userId = localStorage.getItem("userId");
@@ -17,7 +17,7 @@ function FocusPage() {
     // Tab visibility change tracking
     useEffect(() => {
         const handleVisibility = () => {
-            fetch("http://localhost:5000/api/focus/visibility", {
+            fetch(`${api}/api/focus/visibility`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -36,7 +36,7 @@ function FocusPage() {
         const handleBeforeUnload = () => {
             const endTime = Date.now();
             const duration = Math.round((endTime - startTime) / 1000);
-            navigator.sendBeacon("http://localhost:5000/api/focus/session", JSON.stringify({
+            navigator.sendBeacon(`${api}/api/focus/session`, JSON.stringify({
                 userId,
                 sessionStart: new Date(startTime),
                 sessionEnd: new Date(endTime),
@@ -63,7 +63,7 @@ function FocusPage() {
 
             <section className="flex flex-row justify-center items-start bg-background-alt rounded-2xl shadow-lg gap-4 p-6">
                 <CPTGame />
-                <CustomAttentionTest userId={localStorage.getItem("userId")}/>
+                <CustomAttentionTest userId={userId}/>
             </section>
 
 
