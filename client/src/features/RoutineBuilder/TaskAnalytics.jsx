@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
+const api = process.env.REACT_APP_API_URL;
 
-const userId = localStorage.getItem("userId") || "dev_user_123";
+
 function TaskAnalytics({ completed, total }) {
   
   const [completionData, setCompletionData] = useState([]);
@@ -14,7 +15,7 @@ function TaskAnalytics({ completed, total }) {
   const [userId] = useState(localStorage.getItem("userId"));
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/tasks/completion-history/userId=${userId}`)
+    fetch(`${api}/api/tasks/completion-history/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         const formatted = data.map((d) => ({

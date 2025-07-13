@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 
 
+const api = process.env.REACT_APP_API_URL;
+
 function getRandomLetter() {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   return letters[Math.floor(Math.random() * letters.length)];
@@ -20,7 +22,7 @@ function CPTGame() {
   const intervalRef = useRef(null);
   const timerRef = useRef(null);
   const resultRef = useRef([]);
-  const userId = localStorage.getItem("userId") || "dev_user_123";
+  const userId = localStorage.getItem("userId");
   const containerRef = useRef(null);
   let injectAXNext = useRef(false);
 
@@ -95,7 +97,7 @@ function CPTGame() {
     console.log("Summary state updated");
     console.log("summary value is now:", summaryData);
 
-    fetch("http://localhost:5000/api/focus/cpt-summary", {
+    fetch(`${api}/api/focus/cpt-summary`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(summaryData),
@@ -124,7 +126,7 @@ function CPTGame() {
       console.log("Current results:", resultRef.current);
 
 
-      fetch("http://localhost:5000/api/focus/cpt", {
+      fetch(`${api}/api/focus/cpt`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(logEntry),

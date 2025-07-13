@@ -8,7 +8,8 @@ export default function EmotionChat() {
   const [input, setInput] = useState("");
   const chatBoxRef = useRef(null);
 
-  const userId = "dev_user123";
+  const userId = localStorage.getItem("userId") || "dev_user_123";
+
 
   const handleSend = async (text) => {
     if (!text.trim()) return;
@@ -58,23 +59,23 @@ export default function EmotionChat() {
         🎙️ NeuroBridge Chat Assistant
       </h2>
 
-      <div
-        ref={chatBoxRef}
-        className="bg-white text-text-dark p-4 rounded-lg shadow h-96 overflow-y-auto border border-accent"
-      >
-        {messages.map((m, i) => (
-          <div
-            key={i}
-            className={`mb-3 p-3 rounded-lg max-w-[80%] ${
-              m.sender === "user"
-                ? "bg-accent ml-auto text-right"
-                : "bg-background-alt text-left"
-            }`}
-          >
-            {m.text}
-          </div>
-        ))}
-      </div>
+        <div
+          ref={chatBoxRef}
+          className="bg-white text-text-dark p-4 rounded-lg shadow h-96 overflow-y-auto border border-accent"
+        >
+          {messages.map((m, i) => (
+            <div
+              key={i}
+              className={`mb-3 p-3 rounded-lg max-w-[80%] ${
+                m.sender === "user"
+                  ? "bg-accent ml-auto text-right"
+                  : "bg-background-alt text-left"
+              }`}
+            >
+              {m.text}
+            </div>
+          ))}
+        </div>
 
       <div className="flex flex-col sm:flex-row gap-2 items-center mt-6">
         <input

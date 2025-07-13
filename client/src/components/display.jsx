@@ -65,10 +65,13 @@ const [showModal, setShowModal] = useState(false);
       {features.map((feature) => (
         <Link
           key={feature.id}
+          to={`/features/${feature.id}`}
           className="rounded-2xl shadow-md transition-all duration-300 hover:scale-105 hover:bg-[#CCE3DE] bg-[#EAF4F4] p-5 block no-underline" // 'block no-underline' to make Link behave like a div and remove default link underline
         >
           <div className="text-3xl mb-2">{feature.icon}</div>
-          <h2 className="text-xl font-semibold text-[#6B9080]">{feature.title}</h2>
+          <h2 className="text-xl font-semibold text-[#6B9080]">
+            {feature.title}
+          </h2>
           <p className="text-sm text-[#6B9080] mt-2">{feature.description}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {feature.tags.map((tag, i) => (

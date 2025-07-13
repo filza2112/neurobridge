@@ -11,16 +11,7 @@ router.get("/summary/:userId", chatController.getSummary);
 
 // Route for Gemini-generated follow-up response
 router.post("/respond", chatController.getGeminiResponse);
-
-router.get("/:userId", async (req, res) => {
-  try {
-    const triggers = await EmotionTrigger.find({ userId: req.params.userId });
-    res.json(triggers);
-  } catch (err) {
-    console.error("Error fetching emotion triggers:", err);
-    res.status(500).json({ error: "Failed to fetch emotion triggers" });
-  }
-});
+router.get("/top-triggers/:userId", chatController.getTopTriggers);
 
 module.exports = router;
 

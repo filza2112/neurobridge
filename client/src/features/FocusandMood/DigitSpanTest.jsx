@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+const api = process.env.REACT_APP_API_URL;
 
 export default function DigitSpanTest({ userId, difficulty }) {
   const [digitSequence, setDigitSequence] = useState([]);
@@ -45,7 +46,7 @@ export default function DigitSpanTest({ userId, difficulty }) {
     setMessage(isCorrect ? "✅ Correct!" : "❌ Incorrect");
 
     // Save to MongoDB
-    fetch("http://localhost:5000/api/attention/digit-span", {
+    fetch(`${api}/api/attention/digit-span/${userId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

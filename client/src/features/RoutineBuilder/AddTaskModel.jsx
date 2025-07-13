@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-const userId = localStorage.getItem("userId") || "dev_user_123";
+const api = process.env.REACT_APP_API_URL;
+
+
 function AddTaskModal({ onClose, setTasks }) {
   const [title, setTitle] = useState("");
   const [time, setTime] = useState(30);
@@ -19,14 +21,14 @@ function AddTaskModal({ onClose, setTasks }) {
     };
 
     try {
-      await fetch("http://localhost:5000/api/tasks/add", {
+      await fetch(`${api}/api/tasks/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(task),
       });
 
       // 🔁 Fetch the full updated task list
-      const allRes = await fetch(`http://localhost:5000/api/tasks/all/userId=${userId}`);
+      const allRes = await fetch(`${api}/api/tasks/all/${userId}`);
       const updatedTasks = await allRes.json();
       setTasks(updatedTasks);
       onClose(); // ✅ Automatically close modal after adding

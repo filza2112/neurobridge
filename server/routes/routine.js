@@ -69,8 +69,11 @@ router.delete("/delete/:id", async (req, res) => {
 });
 
 // GET /api/tasks/smart-generate
-router.get("/smart-generate", async (req, res) => {
-  const { userId } = req.query;
+
+
+router.get("/smart-generate/:userId", async (req, res) => {
+
+  const { userId } = req.params;
   if (!userId) return res.status(400).json({ error: "userId required" });
 
   try {
@@ -83,17 +86,35 @@ router.get("/smart-generate", async (req, res) => {
     const mood = moodLog?.mood ?? 50;
     const focus = focusLog?.visible ? 1 : 0;
 
-    if (!quiz || typeof quiz.answers !== "object") {
-      return res.status(400).json({ error: "Quiz data not found or invalid." });
+    if (!quiz) {
+      return res.status(400).json({ error: "Quiz data not found." });
     }
 
-    const inferredConditions = quiz?.answers?.inferredCondition || [];
+    let inferredConditions = [];
+
+    if (Array.isArray(quiz.answers)) {
+      // Fallback to primaryCondition or inferredScores
+      if (quiz.primaryCondition) {
+        inferredConditions = [quiz.primaryCondition];
+      } else if (quiz.inferredScores) {
+        inferredConditions = Object.entries(quiz.inferredScores)
+          .filter(([_, score]) => score > 0)
+          .map(([cond]) => cond);
+      }
+    } else if (typeof quiz.answers === "object") {
+      inferredConditions = quiz.answers.inferredCondition || [];
+    }
+
 
     const prompt = `
 You are a helpful mental health assistant AI.
 
 The user has the following diagnosed or inferred conditions:
-${Array.isArray(inferredConditions) ? inferredConditions.join(", ") : inferredConditions}
+${
+  Array.isArray(inferredConditions)
+    ? inferredConditions.join(", ")
+    : inferredConditions
+}
 
 Their latest mood level (scale 0–100): ${mood}
 Their focus level (1 = focused, 0 = not focused): ${focus}
@@ -120,7 +141,9 @@ Return your response strictly as a JSON array like this:
       console.log("💡 Gemini Response:\n", text);
     } catch (err) {
       console.error("❌ Gemini API error:", err);
-      return res.status(500).json({ error: "Failed to get response from Gemini." });
+      return res
+        .status(500)
+        .json({ error: "Failed to get response from Gemini." });
     }
 
     // Parse JSON safely
@@ -133,7 +156,9 @@ Return your response strictly as a JSON array like this:
       if (!Array.isArray(tasks)) throw new Error("Not an array");
     } catch (e) {
       console.error("Gemini returned invalid JSON:", jsonOnly);
-      return res.status(500).json({ error: "Gemini returned invalid task format." });
+      return res
+        .status(500)
+        .json({ error: "Gemini returned invalid task format." });
     }
 
     // Save tasks to DB
@@ -156,8 +181,6 @@ Return your response strictly as a JSON array like this:
     console.error("🔥 AI Routine Generation Error:", err);
     res.status(500).json({ error: "Failed to generate smart routine" });
   }
-
-
 });
 
 
@@ -213,8 +236,9 @@ router.get("/completion-history", async (req, res) => {
 });
 
 // GET /api/tasks/all
-router.get("/all", async (req, res) => {
-  const { userId } = req.query;
+router.get("/all/:userId", async (req, res) => {
+
+  const { userId } = req.params;
 
   if (!userId) {
     return res.status(400).json({ error: "userId is required in query." });

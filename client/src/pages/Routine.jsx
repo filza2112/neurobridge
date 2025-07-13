@@ -4,18 +4,21 @@ import AddTaskModal from "../features/RoutineBuilder/AddTaskModel";
 import TaskAnalytics from "../features/RoutineBuilder/TaskAnalytics";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
+const api = process.env.REACT_APP_API_URL;
 
-const userId = localStorage.getItem("userId") || "dev_user_123";
-function RoutineBuilder({ userId }) {
+
+function RoutineBuilder() {
+  const userId = localStorage.getItem("userId");
   const [tasks, setTasks] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [completionStats, setCompletionStats] = useState({ completed: 0, total: 0 });
+  console.log("RoutineBuilder userId:", userId);
 
   // Fetch tasks (smart + personal)
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/tasks/all/userId=${userId}`);
+        const res = await fetch(`${api}/api/tasks/all/${userId}`);
         const data = await res.json();
         if (Array.isArray(data)) setTasks(data);
         else console.error("Invalid task format:", data);
@@ -24,7 +27,7 @@ function RoutineBuilder({ userId }) {
       }
     };
     fetchTasks();
-  }, [userId]);
+  }, []);
 
 
   
@@ -37,8 +40,9 @@ function RoutineBuilder({ userId }) {
 
   // Smart Task Generation
   const handleSmartGenerate = async () => {
+
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/smart-generate/userId=${userId}`);
+      const res = await fetch(`${api}/api/tasks/smart-generate/${userId}`);
 
       const data = await res.json(); // ✅ only call .json() ONCE
 
@@ -90,10 +94,7 @@ function RoutineBuilder({ userId }) {
 
       {showAddModal && <AddTaskModal onClose={() => setShowAddModal(false)} setTasks={handleTaskUpdate} />}
 
-      <div className="mt-6">
-        <TaskAnalytics completed={completionStats.completed} total={completionStats.total} />
-      </div>
-
+     
       <div className="mt-8 text-text-secondary text-sm text-center">
         💡 Missed a task? Try a lighter fallback. You can always regenerate tasks if your mood or focus changes.
       </div>

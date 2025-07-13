@@ -72,10 +72,10 @@ export default function SimonSaysTest({ userId, difficulty }) {
             }, 1000);
         }
     };
-    const [summary, setSummary] = useState(null);
+    const [sessionAttempts, setSessionAttempts] = useState([]);
 
     const saveToDB = (correct, timeTaken = 0) => {
-        const result = {
+        const attempt = {
             userId,
             sequence,
             userInput: userSequence,
@@ -85,15 +85,9 @@ export default function SimonSaysTest({ userId, difficulty }) {
             difficulty,
             timestamp: new Date(),
         };
-
-        setSummary(result); // 👉 Save to local state for showing summary
-
-        fetch("http://localhost:5000/api/attention/simon", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(result),
-        });
+        setSessionAttempts((prev) => [...prev, attempt]);
     };
+
 
 
     const resetGame = () => {

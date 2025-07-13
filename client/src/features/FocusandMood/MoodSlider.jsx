@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+const api = process.env.REACT_APP_API_URL;
 
 const emojis = ["😡", "😟", "😐", "🙂", "😄"];
 const moodTags = [
@@ -24,20 +25,20 @@ const moodTags = [
   "Accomplished"
 ];
 
-const userId = localStorage.getItem("userId") || "dev_user_123";
 function MoodSlider() {
   const [moodIndex, setMoodIndex] = useState(2); // Default to "Neutral"
   const [why, setWhy] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState([]);
+  const userId = localStorage.getItem("userId") ;
   
 
   const submitMood = async () => {
     setLoading(true);
 
     const moodEntry = {
-      userId: localStorage.getItem("userId"),
+      userId,
       timestamp: new Date().toISOString(),
       mood: moodIndex * 25,
       emoji: emojis[moodIndex],
@@ -47,7 +48,7 @@ function MoodSlider() {
 
 
     try {
-      const res = await fetch("http://localhost:5000/api/mood/submit", {
+      const res = await fetch(`${api}/api/mood/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(moodEntry),

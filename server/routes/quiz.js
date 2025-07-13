@@ -122,12 +122,6 @@ router.post("/submit-first-quiz", async (req, res) => {
           scores[trait] += weight;
         }
       });
-
-      answers.push({
-        question: question.question,
-        answer: option.text,
-        traits,
-      });
     }
 
     const [primaryCondition, maxScore] = Object.entries(scores).reduce(
@@ -149,7 +143,6 @@ router.post("/submit-first-quiz", async (req, res) => {
       inferredScores: scores,
       primaryCondition,
       confidence,
-      answers,
       submittedAt: new Date(),
     });
 
@@ -187,8 +180,6 @@ router.post("/submit-quiz", async (req, res) => {
     const questions = await QuizQuestion.find({ id: { $in: questionIds } });
 
     const scores = { ADHD: 0, OCD: 0, Autism: 0 };
-    const answers = [];
-
     for (const response of responses) {
       const question = questions.find((q) => q.id === response.questionId);
       const index = response.selectedOptionIndex;
@@ -204,12 +195,6 @@ router.post("/submit-quiz", async (req, res) => {
           scores[trait] += weight;
         }
       });
-
-      answers.push({
-        question: question.question,
-        answer: option.text,
-        traits: option.traits,
-      });
     }
 
     const [primaryCondition, maxScore] = Object.entries(scores).reduce(
@@ -221,18 +206,45 @@ router.post("/submit-quiz", async (req, res) => {
       type,
       inferredScores: scores,
       primaryCondition,
-      answers,
       submittedAt: new Date(),
     });
 
     const saved = await quiz.save();
 
-    return res
-      .status(201)
-      .json({ message: "Quiz submitted", scores, primaryCondition });
+    const displayResult =
+         `You're done with your weekly check-in! Come again next week :)`;
+
+    return res.status(201).json({
+      message: "Quiz submitted",
+      scores,
+      primaryCondition,
+      displayResult,
+    });
   } catch (error) {
     console.error("Error in quiz-submit:", error);
     res.status(500).json({ error: "Server error" });
+  }
+});
+
+// GET weekly progress graph data
+router.get("/weekly-progress/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const results = await Quiz.find({ userId, type: "weekly" })
+      .sort({ submittedAt: 1 }) // oldest to newest
+      .lean();
+
+    const data = results.map((entry) => ({
+      date: new Date(entry.submittedAt).toLocaleDateString("en-IN"),
+      score: entry.inferredScores[entry.primaryCondition],
+      condition: entry.primaryCondition,
+    }));
+
+    res.json(data);
+  } catch (err) {
+    console.error("Error fetching weekly progress:", err);
+    res.status(500).json({ error: "Failed to fetch progress data" });
   }
 });
 

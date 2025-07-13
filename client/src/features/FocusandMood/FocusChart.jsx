@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
   LineChart,
   Line,
@@ -7,7 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-const userId=localStorage.getItem("userId") || "dev_user_123"
+const api = process.env.REACT_APP_API_URL;
 function FocusChart() {
   const userId = localStorage.getItem("userId");
   const [focusData, setFocusData] = useState([]);
@@ -19,7 +20,7 @@ function FocusChart() {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/focus/all/userId=${userId}`)
+    fetch(`${api}/api/focus/all/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         const entries = data.focusLogs;

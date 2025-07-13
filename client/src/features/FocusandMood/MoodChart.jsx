@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
   LineChart,
   Line,
@@ -7,13 +8,14 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-const userId=localStorage.getItem("userId") || "dev_user_123"
+
+const api = process.env.REACT_APP_API_URL;
 function MoodChart() {
   const [moodData, setMoodData] = useState([]);
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/mood/all/userId=${userId}`)
+    fetch(`${api}/api/mood/all/${userId}`)
 
       .then((res) => res.json())
       .then((data) => {
