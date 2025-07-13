@@ -6,9 +6,9 @@ import FocusChart from "../features/FocusandMood/FocusChart";
 import WeeklyProgressChart from "../components/WeeklyProgressChart";
 
 import TopTriggersCard from "../components/triggers"; 
-
+import TopDistractionCard from "../components/distraction"; 
 import TaskAnalytics from "../features/RoutineBuilder/TaskAnalytics";
-
+import MoodCalendar from "../components/MoodCalendar";
 
 const userId = localStorage.getItem("userId");
 
@@ -28,6 +28,11 @@ const Dashboard = () => {
           {/* Combined Focus & Mood Section */}
           <DashboardCard title="Focus & Mood">
             <div className="space-y-4"></div>
+            <DashboardCard title="Mood Calendar">
+              <MoodCalendar userId={userId} />
+            </DashboardCard>
+
+            <TopDistractionCard userId={userId} />
           </DashboardCard>
 
           {/* Routine Section */}
@@ -35,7 +40,6 @@ const Dashboard = () => {
             <p className="text-gray-600">
               Track your daily habits and routines here.
             </p>
-            {/* TODO: Add Routine component */}
             <TaskAnalytics userId={userId} />
           </DashboardCard>
 

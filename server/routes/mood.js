@@ -18,8 +18,6 @@ router.post("/submit", async (req, res) => {
   try {
     const { userId, mood, emoji, why, tags, timestamp } = req.body;
 
-
-    
     const entry = new MoodLog({ userId, mood, emoji, why, tags, timestamp });
 
     await entry.save();
@@ -33,15 +31,16 @@ router.post("/submit", async (req, res) => {
 // GET: Get mood history
 router.get("/all/:userId", async (req, res) => {
   try {
-    const { userId } = req.query;
+    const { userId } = req.params;
     if (!userId) return res.status(400).json({ error: "Missing userId" });
 
     const logs = await MoodLog.find({ userId }).sort({ timestamp: 1 });
-    res.json(logs);
+    res.json(logs); // make sure this is an array
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // Example Express.js code
 router.post("/api/mood/submit", async (req, res) => {
@@ -56,6 +55,13 @@ router.post("/api/mood/submit", async (req, res) => {
   }
 });
 
-
+router.get("/calendar/:userId", async (req, res) => {
+  try {
+    const data = await Mood.find({ userId: req.params.userId });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch mood logs" });
+  }
+});
 
 module.exports = { router, MoodLog };

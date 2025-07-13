@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+.react-calendar__tile {
+  background-color: transparent !important;
+  border-radius: 0.5rem;
+  color: #000;
+}
+
+.react-calendar__tile--now {
+  border: 2px solid #2563eb !important; /* Tailwind blue-600 */
+  border-radius: 0.5rem;
+}
+
+
+.react-calendar__tile--active {
+  background-color: transparent !important;
+  color: white;
+}
