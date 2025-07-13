@@ -81,7 +81,7 @@ const SmiskiMemoryMatch = () => {
     <>
     <Navbar />
     <div className="min-h-screen text-white text-center font-[Tiny_5] p-5">
-      <h2 className="text-2xl mb-5">Smiski Memory Match</h2>
+      <h1 className='mx-auto text-text-secondary text-xl text-bold mb-12'> Memory Game</h1>
 
       <div className="flex flex-wrap justify-center gap-5 mb-5">
         {cards.map((card, index) => (

@@ -24,9 +24,9 @@ export default function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/dashbaord" element={<DashBoard />} />
-        <Route path="/features/game" element={<Game />}>
-  <Route path="Memory" element={<MemoryGame />} />
-</Route>
+        <Route path="/features/game" element={<Game />} />
+  <Route path="/features/game/Memory" element={<MemoryGame />} />
+
 
 
 
