@@ -13,19 +13,8 @@ export default function DistractionLogger() {
   const userId = localStorage.getItem("userId");
   const [selected, setSelected] = useState("");
 
-<<<<<<< HEAD
-  const handleLog = async (type) => {
-    try {
-      await fetch("http://localhost:5000/api/distraction/log", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, type }),
-      });
-      setSelected(type);
-      setTimeout(() => setSelected(""), 2000);
-    } catch (err) {
-      console.error("Error logging distraction", err);
-=======
+
+  
   const handleLog = (type) => {
     const userId = localStorage.getItem("userId");
 
@@ -33,7 +22,6 @@ export default function DistractionLogger() {
       console.error("❌ userId is missing in localStorage");
       alert("User ID is missing. Please log in again.");
       return;
->>>>>>> aabc5b2 (change)
     }
 
     fetch("http://localhost:5000/api/distraction/log", {
