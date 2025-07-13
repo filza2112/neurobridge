@@ -3,16 +3,20 @@ const router = express.Router();
 const Distraction = require("../models/Distraction");
 
 // POST: Log a distraction
-router.post("/log", async (req, res) => {
-  const { userId, type } = req.body;
+router.post('/log', async (req, res) => {
   try {
-    const distraction = new Distraction({ userId, type });
-    await distraction.save();
-    res.status(201).json({ message: "Distraction logged" });
-  } catch (err) {
-    res.status(500).json({ error: "Error logging distraction" });
+    const { userId, type } = req.body;
+
+    const newLog = new Distraction({ userId, type });
+    await newLog.save();
+
+    res.json({ success: true, log: newLog });
+  } catch (error) {
+    console.warn(error);
+    res.status(500).json({ error: 'Error logging distraction' });
   }
 });
+
 
 // GET: Distraction frequency (for dashboard)
 router.get("/summary/:userId", async (req, res) => {

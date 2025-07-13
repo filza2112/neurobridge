@@ -2,42 +2,42 @@ import React, { useEffect, useState } from "react";
 
 
 
-export default function UnifiedAttentionDashboard({ userId }) {
+export default function UnifiedAttentionDashboard({userId}) {
   const [metrics, setMetrics] = useState(null);
+  console.log("UnifiedAttentionDashboard userId:", userId);
+
 
   useEffect(() => {
     const fetchData = async () => {
-      const [simon, digit, stroop] = await Promise.all([
-        fetch(`http://localhost:5000/api/attention/simon/${userId}`).then(res => res.json()),
-        fetch(`http://localhost:5000/api/attention/digit/${userId}`).then(res => res.json()),
-        fetch(`http://localhost:5000/api/attention/stroop/${userId}`).then(res => res.json()),
-      ]);
+      try {
+        const res = await fetch(`http://localhost:5000/api/attention/summary/${userId}`);
+        const summary = await res.json();
+        console.log("📊 Summary response:", summary);
 
+        const { simon, digit, stroop } = summary;
 
-      const getAvg = (arr, key) =>
-        arr.length ? arr.reduce((a, b) => a + (b[key] || 0), 0) / arr.length : 0;
+        const simonAvg = {
+          level: simon.maxLevel || 0,
+          accuracy: simon.accuracy || 0,
+        };
+        const digitAvg = {
+          level: digit.maxLevel || 0,
+          attempts: digit.correct + digit.incorrect || 0,
+        };
+        const stroopAvg = {
+          reaction: stroop.avgTime || 0,
+          accuracy: stroop.accuracy || 0,
+        };
 
-      const calcAccuracy = arr =>
-        arr.length ? (arr.filter(x => x.correct).length / arr.length) * 100 : 0;
-
-      const simonAvg = {
-        level: getAvg(simon, "level"),
-        accuracy: calcAccuracy(simon),
-      };
-      const digitAvg = {
-        level: getAvg(digit, "level"),
-        attempts: digit.length,
-      };
-      const stroopAvg = {
-        reaction: getAvg(stroop, "timeTaken"),
-        accuracy: calcAccuracy(stroop),
-      };
-
-      setMetrics({ simonAvg, digitAvg, stroopAvg });
+        setMetrics({ simonAvg, digitAvg, stroopAvg });
+      } catch (err) {
+        console.error("Error fetching attention summary:", err);
+      }
     };
 
     fetchData();
   }, [userId]);
+
 
   if (!metrics) return <div className="text-center text-text-secondary">Loading attention data...</div>;
 
@@ -71,7 +71,7 @@ export default function UnifiedAttentionDashboard({ userId }) {
           <p className="text-text-secondary">Accuracy: <span className="text-primary font-bold">{metrics.stroopAvg.accuracy.toFixed(1)}%</span></p>
         </div>
       </div>
-      
+
     </div>
   );
 }

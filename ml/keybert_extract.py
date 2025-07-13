@@ -2,7 +2,7 @@ from vertexai.preview.generative_models import GenerativeModel
 import vertexai
 
 # Initialize Vertex AI
-vertexai.init(project="your-project-id", location="us-central1")  # Replace with your GCP project ID
+vertexai.init(project="gen-lang-client-0890087892", location="us-central1")  
 
 # Load Gemini flash model
 model = GenerativeModel("gemini-1.5-flash")

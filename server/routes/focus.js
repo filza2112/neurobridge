@@ -67,7 +67,6 @@ const CPTSummary = mongoose.model("CPTSummary", cptSummarySchema);
 // Save tab visibility
 router.post("/visibility", async (req, res) => {
   try {
-    console.log("Focus visibility log received:", req.body);
     const log = new FocusLog(req.body);
     await log.save();
     res.status(201).json({ message: "Focus log saved" });

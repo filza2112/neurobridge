@@ -7,7 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-const userId=localStorage.getItem("userId") || "dev_user_123"
+const userId=localStorage.getItem("userId") ;
 function FocusChart() {
   const userId = localStorage.getItem("userId");
   const [focusData, setFocusData] = useState([]);
@@ -19,7 +19,7 @@ function FocusChart() {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/focus/all/userId=${userId}`)
+    fetch(`http://localhost:5000/api/focus/all/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         const entries = data.focusLogs;

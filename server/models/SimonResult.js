@@ -9,6 +9,7 @@ const SimonSchema = new mongoose.Schema({
   timeTaken: Number,
   difficulty: String,
   timestamp: Date,
+  accuracy: Number,
 });
 
 module.exports = mongoose.model("SimonResult", SimonSchema);

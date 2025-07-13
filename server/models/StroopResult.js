@@ -8,7 +8,8 @@ const StroopResultSchema = new mongoose.Schema({
   correct: Boolean,
   timeTaken: Number,
   difficulty: String,
-  timestamp: Date,
+  timestamp: { type: Date, default: Date.now },
+  accuracy: Number,
 });
 
 module.exports = mongoose.model("StroopResult", StroopResultSchema);

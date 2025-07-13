@@ -9,6 +9,7 @@ const DigitSpanSchema = new mongoose.Schema({
   difficulty: String,
   timestamp: Date,
   level:Number,
+  accuracy: Number,
 });
 
 module.exports = mongoose.model("DigitSpanResult", DigitSpanSchema);

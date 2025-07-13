@@ -13,7 +13,7 @@ function MoodChart() {
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/mood/all/userId=${userId}`)
+    fetch(`http://localhost:5000/api/mood/all/${userId}`)
 
       .then((res) => res.json())
       .then((data) => {
