@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import VoiceInput from "../features/chat/VoiceInput";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 
 export default function EmotionChat() {
   const [messages, setMessages] = useState([]);
@@ -49,6 +51,8 @@ export default function EmotionChat() {
   }, [messages]);
 
   return (
+    <>
+    <Navbar />
     <div className="min-h-screen bg-background-alt text-text-dark p-6 font-mullish">
       <h2 className="text-3xl font-bold text-center mb-6 text-primary">
         🎙️ NeuroBridge Chat Assistant
@@ -89,5 +93,7 @@ export default function EmotionChat() {
         <VoiceInput onTranscribe={(text) => setInput(text)} />
       </div>
     </div>
+    <Footer />
+    </>
   );
 }

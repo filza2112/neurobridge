@@ -34,7 +34,7 @@ const features = [
     description:
       "Gamified brain training zone with adaptive levels for attention, inhibition control, and social skills",
     tags: ["ADHD", "Autism", "OCD"],
-    path: "/features/neuroplay-zone",
+    path: "/features/game",
   },
   {
     id: "Chat",

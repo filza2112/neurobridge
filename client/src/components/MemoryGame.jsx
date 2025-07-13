@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Navbar from './navbar';
+import Footer from './footer';
 import img1 from '../assets/smiski/smiski1.png';
 import img2 from '../assets/smiski/smiski2.png';
 import img3 from '../assets/smiski/smiski3.png';
@@ -76,7 +78,9 @@ const SmiskiMemoryMatch = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white text-center font-[Tiny_5] p-5">
+    <>
+    <Navbar />
+    <div className="min-h-screen text-white text-center font-[Tiny_5] p-5">
       <h2 className="text-2xl mb-5">Smiski Memory Match</h2>
 
       <div className="flex flex-wrap justify-center gap-5 mb-5">
@@ -119,6 +123,8 @@ const SmiskiMemoryMatch = () => {
         </div>
       )}
     </div>
+    <Footer />
+    </>
   );
 };
 
