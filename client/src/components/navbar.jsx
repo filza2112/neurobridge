@@ -70,6 +70,10 @@ const Navbar = () => {
               <Link to="/features/quiz">Quiz</Link>
               <div className="absolute bottom-0 h-1 bg-accent w-full hidden group-hover:block transition-all duration-200"></div>
             </li>
+            <li className="text-white font-mullish hover:text-accent transition-all duration-200 cursor-pointer py-7 relative group">
+              <Link to="/features/Chat">Chat</Link>
+              <div className="absolute bottom-0 h-1 bg-accent w-full hidden group-hover:block transition-all duration-200"></div>
+            </li>
           </ul>
 
           {/* Desktop Auth Actions */}
@@ -126,6 +130,10 @@ const Navbar = () => {
                 >
                   Quiz
                 </Link>
+              </li>
+              <li className="text-white font-mullish hover:text-accent transition-all duration-200 cursor-pointer py-3 border-b border-accent/20">
+                <Link to="/features/Chat">Chat</Link>
+                <div className="absolute bottom-0 h-1 bg-accent w-full hidden group-hover:block transition-all duration-200"></div>
               </li>
             </ul>
             <div className="flex flex-col space-y-4 w-full px-4 mt-4">

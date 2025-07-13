@@ -160,6 +160,8 @@ exports.getSummary = async (req, res) => {
   }
 };
 
+
+
 exports.getGeminiResponse = async (req, res) => {
   try {
     const { prompt } = req.body;
@@ -174,3 +176,37 @@ exports.getGeminiResponse = async (req, res) => {
     res.status(500).json({ error: "Failed to generate Gemini response" });
   }
 };
+
+// GET /api/chat/top-triggers/:userId
+// GET /api/chat/top-triggers/:userId
+exports.getTopTriggers = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const logs = await ChatLog.find({ userId, alert_triggered: true, trigger_keywords: { $exists: true, $not: { $size: 0 } } });
+
+    const keywordMap = {};
+
+    logs.forEach((log) => {
+      (log.trigger_keywords || []).forEach((kw) => {
+        const key = kw.toLowerCase();
+        if (!keywordMap[key]) {
+          keywordMap[key] = { count: 0, tone: log.tone };
+        }
+        keywordMap[key].count += 1;
+      });
+    });
+
+    // Convert to sorted array
+    const sorted = Object.entries(keywordMap)
+      .map(([trigger, { count, tone }]) => ({ trigger, count, tone }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+
+    res.json(sorted);
+  } catch (err) {
+    console.error("Error in getTopTriggers:", err);
+    res.status(500).json({ error: "Failed to fetch top triggers" });
+  }
+};
+

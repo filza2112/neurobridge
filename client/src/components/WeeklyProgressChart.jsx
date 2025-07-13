@@ -19,7 +19,7 @@ const WeeklyProgressChart = () => {
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        const res = await axios.get(`${API_URL}/api/weekly-progress/${userId}`);
+        const res = await axios.get(`${API_URL}/api/quiz/weekly-progress/${userId}`);
         setData(res.data);
       } catch (error) {
         console.error("Error fetching weekly progress:", error);

@@ -23,8 +23,10 @@ const AuthModal = ({ isOpen, onClose, isSignupMode, setSignupMode }) => {
 
       if (response.status === 200 || response.status === 201) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.userId); 
+
         onClose();
-        navigate('/homepage');
+        navigate("/homepage");
       } else {
         setError('Something went wrong');
       }
