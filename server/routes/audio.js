@@ -26,10 +26,10 @@ router.post("/transcribe", upload.single("audio"), async (req, res) => {
   try {
     const filePath = req.file.path;
 
-    // 🧠 Transcribe
+    // Transcribe
     const transcript = await transcribeAudio(filePath);
 
-    // 💬 Analyze
+    // Analyze
     const sentiment = await analyzeSentiment(transcript);
     const tone = await classifyTone(transcript);
 
