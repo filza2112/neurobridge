@@ -9,7 +9,8 @@ import Chat from "./pages/Chat";
 import FirstQuiz from "./features/Quiz/FirstQuiz";
 import WeeklyQuiz from "./features/Quiz/WeeklyQuiz";
 import MoodComic from './features/Quiz/MoodComic';
-import Game from './components/MemoryGame';
+import Game from './pages/Game';
+import MemoryGame from './components/MemoryGame';
 
 
 
@@ -23,6 +24,11 @@ export default function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/dashbaord" element={<DashBoard />} />
+        <Route path="/features/game" element={<Game />} />
+  <Route path="/features/game/Memory" element={<MemoryGame />} />
+
+
+
 
         <Route
           path="/features/routine-builder"

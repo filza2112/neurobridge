@@ -80,8 +80,9 @@ function RoutineBuilder() {
   };
 
   return (
+    <>
+    <Navbar />
     <div className="p-6 font-mullish min-h-screen bg-background">
-      <Navbar />
       <h1 className="text-3xl font-bold mt-4 mb-6 text-primary text-center">🗓 Daily Routine Builder</h1>
 
       <div className="flex flex-wrap gap-4 mb-6">
@@ -97,8 +98,9 @@ function RoutineBuilder() {
       <div className="mt-8 text-text-secondary text-sm text-center">
         💡 Missed a task? Try a lighter fallback. You can always regenerate tasks if your mood or focus changes.
       </div>
-      <Footer />
     </div>
+    <Footer />
+  </>
 
   );
 }

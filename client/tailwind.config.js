@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Your New Color Palettethe
+
         'background': '#FFFFFF', 
         'background-alt': '#EAF4F4',
         'accent': '#CCE3DE',  

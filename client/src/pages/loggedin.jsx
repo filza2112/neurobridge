@@ -3,14 +3,15 @@ import Navbar from '../components/navbar';
 import Hero from '../components/Hero';
 import Features from '../components/display';
 import Footer from '../components/footer';
-import GameCards from '../components/GameCards';
 
 const LoginPage = () => {
+  const [isSignupMode, setSignupMode] = useState(false);
 
   return (
     <>
     <Navbar />
-    <GameCards />
+    <Hero />
+    <Features />
     <Footer />
     </>
   );

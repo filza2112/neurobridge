@@ -23,6 +23,7 @@
     "express": "^5.1.0",
     "mongoose": "^8.16.1",
     "multer": "^2.0.1",
+    "react-calendar": "^6.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",

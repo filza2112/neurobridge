@@ -3,7 +3,11 @@ import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
+
+
 const FirstQuiz = () => {
+  const userId = localStorage.getItem("userId") || "dev_user_123" ; 
+
   const [questions, setQuestions] = useState([]);
   const [responses, setResponses] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -12,7 +16,6 @@ const FirstQuiz = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [alreadyTaken, setAlreadyTaken] = useState(false);
 
-  const userId = localStorage.getItem("userId");
   
   useEffect(() => {
     const init = async () => {

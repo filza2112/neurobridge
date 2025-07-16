@@ -63,7 +63,7 @@ const Navbar = () => {
               <div className="absolute bottom-0 h-1 bg-accent w-full hidden group-hover:block transition-all duration-200"></div>
             </li>
             <li className="text-white font-mullish hover:text-accent transition-all duration-200 cursor-pointer py-7 relative group">
-              <Link to="/features/neuroplay-zone">NeuroPlay</Link>
+              <Link to="/features/game">NeuroPlay</Link>
               <div className="absolute bottom-0 h-1 bg-accent w-full hidden group-hover:block transition-all duration-200"></div>
             </li>
             <li className="text-white font-mullish hover:text-accent transition-all duration-200 cursor-pointer py-7 relative group">
@@ -71,7 +71,7 @@ const Navbar = () => {
               <div className="absolute bottom-0 h-1 bg-accent w-full hidden group-hover:block transition-all duration-200"></div>
             </li>
             <li className="text-white font-mullish hover:text-accent transition-all duration-200 cursor-pointer py-7 relative group">
-              <Link to="/features/Chat">Chat</Link>
+              <Link to="/features/chat">AI Therapist</Link>
               <div className="absolute bottom-0 h-1 bg-accent w-full hidden group-hover:block transition-all duration-200"></div>
             </li>
           </ul>
