@@ -4,7 +4,7 @@
 # Neuro Disease Companion App
 
 **Designed for individuals with ADHD, Autism, and OCD**
-Helping neurodivergent users manage daily tasks, routines, and emotional well-being through intelligent, adaptive tools.
+Helping neurodivergent users manage daily tasks, routines, and emotional well-being through intelligent, adaptive tools and fun gameplay.
 
 ---
 
